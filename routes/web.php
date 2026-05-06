@@ -20,7 +20,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Print Routes
 Route::get('scan', [PrintController::class, 'scan'])->name('scan');
-Route::get('print/{shop_uuid?}', [PrintController::class, 'print'])->name('print');
+Route::get('print', [PrintController::class, 'lookup'])->name('print');
+Route::get('print/upload/{shop_uuid?}', [PrintController::class, 'print'])->name('print.upload-page');
+Route::get('print/{shop_uuid}', function (string $shop_uuid) {
+    return redirect()->route('print.upload-page', ['shop_uuid' => $shop_uuid]);
+})->whereUuid('shop_uuid');
 Route::post('print/upload', [PrintController::class, 'upload'])->name('print.upload');
 Route::post('print/pay', [PrintController::class, 'processPayment'])->name('print.pay');
 Route::post('print/verify-otp', [PrintController::class, 'verifyOtp'])->name('print.verify-otp');
@@ -34,19 +38,22 @@ Route::get('cls', function () {
     Artisan::call('optimize:clear');
     $appVersion = app()->version();
     $phpVersion = phpversion();
-    echo "App version: " . $appVersion;
-    echo "<br>";
-    echo "PHP version: " . $phpVersion;
-    echo "<br>";
-    return "Cache is cleared";
+    echo 'App version: ' . $appVersion;
+    echo '<br>';
+    echo 'PHP version: ' . $phpVersion;
+    echo '<br>';
+
+    return 'Cache is cleared';
 });
 
 Route::get('symlink', function () {
     Artisan::call('storage:link');
-    return "Sym link created";
+
+    return 'Sym link created';
 });
 
 Route::get('migrate-tables', function () {
     Artisan::call('migrate', ['--force' => true]);
-    return "Tables are migrated successfully!";
+
+    return 'Tables are migrated successfully!';
 });

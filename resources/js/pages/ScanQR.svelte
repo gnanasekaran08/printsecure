@@ -104,8 +104,10 @@
         // Try to extract shop UUID from the scanned URL or text
         let shopUuid: string | null = null;
 
-        // Check if it's a URL with /print/{uuid} pattern
-        const urlMatch = decodedText.match(/\/print\/([a-f0-9-]{36})/i);
+        // Check if it's a URL with /print/upload/{uuid} pattern
+        const uploadUrlMatch = decodedText.match(/\/print\/upload\/([a-f0-9-]{36})/i);
+        const legacyUrlMatch = decodedText.match(/\/print\/([a-f0-9-]{36})/i);
+        const urlMatch = uploadUrlMatch || legacyUrlMatch;
         if (urlMatch) {
             shopUuid = urlMatch[1];
         }
@@ -129,9 +131,9 @@
             isRedirecting = true;
             stopScanning();
 
-            // Redirect to print page with shop UUID
+            // Redirect to print upload page with shop UUID
             setTimeout(() => {
-                router.visit(`/print/${shopUuid}`);
+                router.visit(`/print/upload/${shopUuid}`);
             }, 1000);
         }
     }
@@ -155,7 +157,7 @@
     }
 
     function goToManualUpload() {
-        router.visit('/print');
+        router.visit('/print/upload');
     }
 </script>
 

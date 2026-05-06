@@ -11,7 +11,7 @@ class ShopListController extends Controller
     {
         try {
             $shops = Shop::query()
-                ->when("shop" === auth()->user()->type, fn($query) => $query->where('user_id', auth()->id()))
+                ->when(auth()->user()->type === 'shop', fn($query) => $query->where('user_id', auth()->id()))
                 ->withCount('today_print_jobs')->orderBy('created_at', 'desc')
                 ->paginate(10);
 
@@ -25,9 +25,10 @@ class ShopListController extends Controller
                     'mobile_number'          => $shop->owner->mobile_number ?? null,
                     'created_at'             => $shop->created_at->toDateTimeString(),
                     'today_print_jobs_count' => $shop->today_print_jobs_count,
-                    'qr_code_url'            => route('print', ['shop_uuid' => $shop->uuid]),
+                    'qr_code_url'            => route('print.upload-page', ['shop_uuid' => $shop->uuid]),
                 ];
             });
+
             return inertia('Shops', [
                 'shops' => $shops->toArray(),
             ]);

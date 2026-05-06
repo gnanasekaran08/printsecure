@@ -12,16 +12,16 @@ test('guests can access the print page without shop UUID', function () {
 
     $response->assertOk();
     $response->assertInertia(fn($page) => $page
-            ->component('PrintUpload')
-            ->where('shop', null)
-            ->where('shopUuid', null)
+            ->component('PrintLookup')
+            ->where('filters.doc_no', '')
+            ->where('printJob', null)
     );
 });
 
 test('guests can access the print page with shop UUID', function () {
     $shop = \App\Models\Shop::factory()->create();
 
-    $response = $this->get(route('print', $shop->uuid));
+    $response = $this->get(route('print.upload-page', $shop->uuid));
 
     $response->assertOk();
     $response->assertInertia(fn($page) => $page

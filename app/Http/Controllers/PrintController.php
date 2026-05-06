@@ -14,6 +14,51 @@ use Inertia\Inertia;
 class PrintController extends Controller
 {
     /**
+     * Show the public print lookup page.
+     */
+    public function lookup(Request $request)
+    {
+        $validated = $request->validate([
+            'doc_no' => 'nullable|digits:6',
+        ]);
+
+        $printJob = null;
+
+        if (! empty($validated['doc_no'])) {
+            $job = PrintJob::query()
+                ->with(['shop:id,name', 'attachments:id,print_job_id,filename,filepath,filetype,filesize'])
+                ->where('doc_no', $validated['doc_no'])
+                ->whereNull('removed_at')
+                ->first();
+
+            if ($job) {
+                $printJob = [
+                    'job_uuid'     => $job->job_uuid,
+                    'doc_no'       => $job->doc_no,
+                    'status'       => $job->status,
+                    'submitted_at' => optional($job->submitted_at)?->toDateTimeString(),
+                    'shop'         => $job->shop ? [
+                        'name' => $job->shop->name,
+                    ] : null,
+                    'attachments'  => $job->attachments->map(fn($attachment) => [
+                        'filename' => $attachment->filename,
+                        'filetype' => $attachment->filetype,
+                        'filesize' => $attachment->filesize,
+                        'url'      => asset('storage/' . $attachment->filepath),
+                    ])->toArray(),
+                ];
+            }
+        }
+
+        return Inertia::render('PrintLookup', [
+            'filters'  => [
+                'doc_no' => $request->string('doc_no')->toString(),
+            ],
+            'printJob' => $printJob,
+        ]);
+    }
+
+    /**
      * Show the QR code scanner page.
      */
     public function scan()
