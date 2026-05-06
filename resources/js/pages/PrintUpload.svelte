@@ -27,6 +27,7 @@
     import { onMount } from 'svelte';
     import toast, { Toaster } from 'svelte-french-toast';
     import AppHead from '@/components/AppHead.svelte';
+    import AppLogoIcon from '@/components/AppLogoIcon.svelte';
 
     let {
         shop = null,
@@ -282,17 +283,8 @@
                 </button>
             {/if}
 
-            <a href="/" class="flex items-center gap-2">
-                <div
-                    class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 shadow-md"
-                >
-                    <Printer class="h-4 w-4 text-white" />
-                </div>
-                <span
-                    class="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-lg font-bold text-transparent"
-                >
-                    PrintSecure
-                </span>
+            <a href="/">
+                <AppLogoIcon class="h-6 w-6" />
             </a>
             {#if shop}
                 <div class="ml-auto text-right">
