@@ -203,14 +203,14 @@
 
     <!-- Navigation -->
     <nav
-        class="navbar fixed top-0 z-50 border-b border-base-200/50 bg-base-100/80 px-6 backdrop-blur-xl lg:px-12"
+        class="navbar fixed top-0 z-50 border-b border-base-200/50 bg-base-100/80 px-3 backdrop-blur-xl sm:px-6 lg:px-12"
     >
-        <div class="navbar-start">
+        <div class="navbar-start min-w-0">
             <a href="/" class="flex items-center gap-3 text-xl font-bold">
                 <img
                     src={$page.props.app_logo}
                     alt="PrintSecure Logo"
-                    class="w-auto h-12"
+                    class="h-10 w-auto max-w-[150px] sm:h-12 sm:max-w-none"
                 />
             </a>
         </div>
@@ -234,24 +234,25 @@
                 </li>
             </ul>
         </div>
-        <div class="navbar-end gap-3">
+        <div class="navbar-end gap-1 sm:gap-3">
             {#if auth.user}
                 <Link
                     href={toUrl(dashboard())}
-                    class="btn btn-ghost font-medium text-base-content/70 hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
+                    class="btn btn-sm sm:btn-md btn-ghost font-medium text-base-content/70 hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
                 >
                     Dashboard
                 </Link>
             {:else}
                 <Link
                     href="/login"
-                    class="btn btn-ghost font-medium text-base-content/70 hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
+                    class="btn btn-sm sm:btn-md btn-ghost px-2 sm:px-4 font-medium text-base-content/70 hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
                 >
                     Login
                 </Link>
-                <Link href="/register" class="btn font-medium bg-[#2ecc71] text-white hover:bg-[#27ae60] border-none">
+                <Link href="/register" class="btn btn-sm sm:btn-md px-2 sm:px-4 font-medium bg-[#2ecc71] text-white hover:bg-[#27ae60] border-none whitespace-nowrap">
                     <Store class="h-4 w-4" />
-                    Shop Owner? Register
+                    <span class="hidden sm:inline">Shop Owner? Register</span>
+                    <span class="sm:hidden">Register</span>
                 </Link>
             {/if}
         </div>
@@ -780,7 +781,7 @@
             >
                 <!-- Connection Line -->
                 <div
-                    class="absolute left-0 right-0 top-24 hidden h-1 bg-gradient-to-r from-cyan-500 via-[#2ecc71] via-orange-500 to-emerald-500 md:block"
+                    class="absolute left-0 right-0 top-24 hidden h-1 bg-gradient-to-r from-cyan-500 via-orange-500 to-emerald-500 md:block"
                     style="margin: 0 10%;"
                 ></div>
 
