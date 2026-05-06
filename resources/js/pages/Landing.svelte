@@ -29,9 +29,9 @@
             title: 'No Account Required',
             description:
                 'Print instantly without signing up. No email, no registration, no hassle.',
-            gradient: 'from-violet-500 to-purple-600',
-            bgColor: 'bg-violet-500/10',
-            iconColor: 'text-violet-500',
+            gradient: 'from-[#2ecc71] to-[#27ae60]',
+            bgColor: 'bg-[#2ecc71]/10',
+            iconColor: 'text-[#2ecc71]',
         },
         {
             icon: Shield,
@@ -75,7 +75,7 @@
             title: 'Upload',
             description: 'Select your files and customize print settings',
             icon: FileText,
-            color: 'from-violet-500 to-indigo-600',
+            color: 'from-[#2ecc71] to-[#27ae60]',
         },
         {
             step: 3,
@@ -127,7 +127,7 @@
     <div class="fixed inset-0 -z-10 overflow-hidden">
         <!-- Gradient Orbs -->
         <div
-            class="absolute -left-40 -top-40 h-96 w-96 animate-pulse rounded-full bg-gradient-to-br from-violet-400/30 to-purple-600/30 blur-3xl"
+            class="absolute -left-40 -top-40 h-96 w-96 animate-pulse rounded-full bg-gradient-to-br from-[#2ecc71]/30 to-[#27ae60]/30 blur-3xl"
         ></div>
         <div
             class="absolute -bottom-40 -right-40 h-[500px] w-[500px] animate-pulse rounded-full bg-gradient-to-br from-orange-400/20 to-pink-600/20 blur-3xl"
@@ -160,7 +160,7 @@
                         y1="0"
                         x2="80"
                         y2="80"
-                        stroke="#8b5cf6"
+                        stroke="#2ecc71"
                         stroke-width="0.5"
                         opacity="0.08"
                     />
@@ -170,7 +170,7 @@
                         y1="80"
                         x2="80"
                         y2="80"
-                        stroke="#8b5cf6"
+                        stroke="#2ecc71"
                         stroke-width="0.5"
                         opacity="0.08"
                     />
@@ -179,7 +179,7 @@
                         cx="80"
                         cy="80"
                         r="1.5"
-                        fill="#8b5cf6"
+                        fill="#2ecc71"
                         opacity="0.12"
                     />
                 </pattern>
@@ -219,7 +219,7 @@
                 <li>
                     <a
                         href="#features"
-                        class="rounded-lg font-medium text-base-content/70 transition-colors hover:bg-violet-500/10 hover:text-violet-600"
+                        class="rounded-lg font-medium text-base-content/70 transition-colors hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
                     >
                         Features
                     </a>
@@ -227,7 +227,7 @@
                 <li>
                     <a
                         href="#how-it-works"
-                        class="rounded-lg font-medium text-base-content/70 transition-colors hover:bg-violet-500/10 hover:text-violet-600"
+                        class="rounded-lg font-medium text-base-content/70 transition-colors hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
                     >
                         How it Works
                     </a>
@@ -238,18 +238,18 @@
             {#if auth.user}
                 <Link
                     href={toUrl(dashboard())}
-                    class="btn btn-ghost font-medium text-base-content/70 hover:bg-violet-500/10 hover:text-violet-600"
+                    class="btn btn-ghost font-medium text-base-content/70 hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
                 >
                     Dashboard
                 </Link>
             {:else}
                 <Link
                     href="/login"
-                    class="btn btn-ghost font-medium text-base-content/70 hover:bg-violet-500/10 hover:text-violet-600"
+                    class="btn btn-ghost font-medium text-base-content/70 hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
                 >
                     Login
                 </Link>
-                <Link href="/register" class="btn btn-primary font-medium">
+                <Link href="/register" class="btn font-medium bg-[#2ecc71] text-white hover:bg-[#27ae60] border-none">
                     <Store class="h-4 w-4" />
                     Shop Owner? Register
                 </Link>
@@ -272,7 +272,7 @@
                 class="absolute inset-0 bg-gradient-to-br from-pink-200/60 via-transparent to-orange-200/50"
             ></div>
             <div
-                class="absolute inset-0 bg-gradient-to-tl from-violet-200/50 via-transparent to-cyan-200/40"
+                class="absolute inset-0 bg-gradient-to-tl from-[#2ecc71]/20 via-transparent to-cyan-200/40"
             ></div>
 
             <!-- Center fade to white -->
@@ -303,7 +303,7 @@
                     <div class="relative mb-8 flex justify-center">
                         <div class="relative">
                             <div
-                                class="flex h-56 w-80 items-center justify-center rounded-3xl bg-gradient-to-br from-slate-50 via-violet-50/50 to-indigo-50"
+                                class="flex h-56 w-80 items-center justify-center rounded-3xl bg-gradient-to-br from-slate-50 via-[#2ecc71]/5 to-[#2ecc71]/10"
                             >
                                 <!-- Stylized Printer Illustration -->
                                 <svg
@@ -328,7 +328,7 @@
                                         height="80"
                                         rx="12"
                                         fill="url(#printerGradient)"
-                                        stroke="#8b5cf6"
+                                        stroke="#2ecc71"
                                         stroke-width="2"
                                     />
                                     <!-- Paper Input -->
@@ -359,7 +359,7 @@
                                         stroke="#e2e8f0"
                                         stroke-width="2"
                                     />
-                                    <!-- Paper Coming Out -->
+                                x``    <!-- Paper Coming Out -->
                                     <rect
                                         x="60"
                                         y="125"
@@ -375,7 +375,7 @@
                                         y1="135"
                                         x2="128"
                                         y2="135"
-                                        stroke="#8b5cf6"
+                                        stroke="#2ecc71"
                                         stroke-width="2"
                                         stroke-linecap="round"
                                     />
@@ -384,7 +384,7 @@
                                         y1="143"
                                         x2="118"
                                         y2="143"
-                                        stroke="#a78bfa"
+                                        stroke="#5dd891"
                                         stroke-width="2"
                                         stroke-linecap="round"
                                     />
@@ -393,7 +393,7 @@
                                         y1="151"
                                         x2="108"
                                         y2="151"
-                                        stroke="#c4b5fd"
+                                        stroke="#a8edbd"
                                         stroke-width="2"
                                         stroke-linecap="round"
                                     />
@@ -478,15 +478,15 @@
                                         >
                                             <stop
                                                 offset="0%"
-                                                stop-color="#8b5cf6"
+                                                stop-color="#2ecc71"
                                             />
                                             <stop
                                                 offset="50%"
-                                                stop-color="#06b6d4"
+                                                stop-color="#1abc9c"
                                             />
                                             <stop
                                                 offset="100%"
-                                                stop-color="#8b5cf6"
+                                                stop-color="#2ecc71"
                                             />
                                         </linearGradient>
                                     </defs>
@@ -508,9 +508,9 @@
                     <div class="flex justify-center gap-6">
                         <div class="flex items-center gap-2">
                             <div
-                                class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100"
+                                class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2ecc71]/10"
                             >
-                                <Shield class="h-5 w-5 text-violet-600" />
+                                <Shield class="h-5 w-5 text-[#2ecc71]" />
                             </div>
                             <span class="text-sm font-medium text-slate-700"
                                 >Secure</span
@@ -547,16 +547,16 @@
                     class="mb-6 flex items-center justify-center gap-4 lg:justify-start"
                 >
                     <div
-                        class="h-px w-12 bg-gradient-to-r from-transparent to-violet-400"
+                        class="h-px w-12 bg-gradient-to-r from-transparent to-[#2ecc71]"
                     ></div>
                     <div
-                        class="inline-flex items-center gap-2 rounded-full border border-violet-200/50 bg-gradient-to-r from-violet-50 to-indigo-50 px-5 py-2.5 text-sm font-semibold text-violet-700 shadow-sm"
+                        class="inline-flex items-center gap-2 rounded-full border border-[#2ecc71]/30 bg-gradient-to-r from-[#2ecc71]/5 to-[#2ecc71]/10 px-5 py-2.5 text-sm font-semibold text-[#2ecc71] shadow-sm"
                     >
                         <Shield class="h-4 w-4" />
                         100% Secure & Private
                     </div>
                     <div
-                        class="h-px w-12 bg-gradient-to-l from-transparent to-violet-400"
+                        class="h-px w-12 bg-gradient-to-l from-transparent to-[#2ecc71]"
                     ></div>
                 </div>
 
@@ -565,7 +565,7 @@
                 >
                     <span class="block text-slate-800"
                         >Print <span
-                            class="relative inline-block bg-gradient-to-r from-violet-600 via-purple-500 to-pink-500 bg-clip-text text-transparent"
+                            class="relative inline-block bg-gradient-to-r from-[#2ecc71] via-[#27ae60] to-[#1abc9c] bg-clip-text text-transparent"
                         >
                             Secure
                             <svg
@@ -590,15 +590,15 @@
                                     >
                                         <stop
                                             offset="0%"
-                                            stop-color="#8b5cf6"
+                                            stop-color="#2ecc71"
                                         />
                                         <stop
                                             offset="50%"
-                                            stop-color="#a855f7"
+                                            stop-color="#27ae60"
                                         />
                                         <stop
                                             offset="100%"
-                                            stop-color="#ec4899"
+                                            stop-color="#1abc9c"
                                         />
                                     </linearGradient>
                                 </defs>
@@ -613,7 +613,7 @@
                     Upload your documents securely, and pay then collect your
                     prints from shops. Doesn't need to expose the your personal
                     details.
-                    <span class="font-medium text-violet-600"
+                    <span class="font-medium text-[#2ecc71]"
                         >No sign-up required</span
                     >, no personal data collected. Your privacy matters.
                 </p>
@@ -623,7 +623,7 @@
                 >
                     <Link
                         href="/scan"
-                        class="group btn btn-lg gap-2 bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-600 text-white shadow-xl shadow-violet-500/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-violet-500/40"
+                        class="group btn btn-lg gap-2 bg-gradient-to-r from-[#2ecc71] via-[#27ae60] to-[#1abc9c] text-white shadow-xl shadow-[#2ecc71]/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#2ecc71]/40"
                     >
                         <QrCode class="h-5 w-5" />
                         Scan QR Code
@@ -653,9 +653,9 @@
                     </div>
                     <div class="flex items-center gap-2 text-sm text-slate-500">
                         <div
-                            class="flex h-8 w-8 items-center justify-center rounded-full bg-violet-100"
+                            class="flex h-8 w-8 items-center justify-center rounded-full bg-[#2ecc71]/10"
                         >
-                            <EyeOff class="h-4 w-4 text-violet-600" />
+                            <EyeOff class="h-4 w-4 text-[#2ecc71]" />
                         </div>
                         <span>Zero Data Storage</span>
                     </div>
@@ -674,7 +674,7 @@
 
     <!-- Stats Section - Vibrant -->
     <section
-        class="relative overflow-hidden bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 py-16"
+        class="relative overflow-hidden bg-gradient-to-r from-[#2ecc71] via-[#27ae60] to-[#1abc9c] py-16"
     >
         <div
             class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=''30'' height=''30'' viewBox=''0 0 30 30'' fill=''none'' xmlns=''http://www.w3.org/2000/svg''%3E%3Ccircle cx=''2'' cy=''2'' r=''1'' fill=''white'' fill-opacity=''0.1''/%3E%3C/svg%3E')]"
@@ -705,7 +705,7 @@
         <div class="mx-auto max-w-6xl px-6 lg:px-12">
             <div class="mb-20 text-center">
                 <div
-                    class="mb-4 inline-flex items-center gap-2 rounded-full bg-violet-100 px-4 py-2 text-sm font-semibold text-violet-700"
+                    class="mb-4 inline-flex items-center gap-2 rounded-full bg-[#2ecc71]/10 px-4 py-2 text-sm font-semibold text-[#2ecc71]"
                 >
                     <Zap class="h-4 w-4" />
                     Features
@@ -713,7 +713,7 @@
                 <h2 class="mb-4 text-4xl font-bold lg:text-5xl">
                     Why Choose
                     <span
-                        class="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent"
+                        class="bg-gradient-to-r from-[#2ecc71] to-[#1abc9c] bg-clip-text text-transparent"
                     >
                         PrintSecure
                     </span>
@@ -780,7 +780,7 @@
             >
                 <!-- Connection Line -->
                 <div
-                    class="absolute left-0 right-0 top-24 hidden h-1 bg-gradient-to-r from-cyan-500 via-violet-500 via-orange-500 to-emerald-500 md:block"
+                    class="absolute left-0 right-0 top-24 hidden h-1 bg-gradient-to-r from-cyan-500 via-[#2ecc71] via-orange-500 to-emerald-500 md:block"
                     style="margin: 0 10%;"
                 ></div>
 
@@ -820,7 +820,7 @@
     <section class="py-24">
         <div class="mx-auto max-w-5xl px-6 lg:px-12">
             <div
-                class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 p-12 shadow-2xl shadow-violet-500/30 lg:p-16"
+                class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#2ecc71] via-[#27ae60] to-[#1abc9c] p-12 shadow-2xl shadow-[#2ecc71]/30 lg:p-16"
             >
                 <!-- Pattern Overlay -->
                 <div class="absolute inset-0 opacity-10">
@@ -855,7 +855,7 @@
                     <div class="flex justify-center">
                         <Link
                             href={'/register'}
-                            class="btn btn-lg bg-white text-violet-700 shadow-xl hover:bg-slate-100"
+                            class="btn btn-lg bg-white text-[#27ae60] shadow-xl hover:bg-slate-100"
                         >
                             Register your shop now!
                         </Link>
@@ -891,14 +891,14 @@
                         <li>
                             <a
                                 href="#features"
-                                class="transition-colors hover:text-violet-600"
+                                class="transition-colors hover:text-[#2ecc71]"
                                 >Features</a
                             >
                         </li>
                         <li>
                             <a
                                 href="#how-it-works"
-                                class="transition-colors hover:text-violet-600"
+                                class="transition-colors hover:text-[#2ecc71]"
                                 >How it Works</a
                             >
                         </li>
@@ -910,21 +910,21 @@
                         <li>
                             <a
                                 href={'javascript:void(0);'}
-                                class="transition-colors hover:text-violet-600"
+                                class="transition-colors hover:text-[#2ecc71]"
                                 >Help Center</a
                             >
                         </li>
                         <li>
                             <a
                                 href={'javascript:void(0);'}
-                                class="transition-colors hover:text-violet-600"
+                                class="transition-colors hover:text-[#2ecc71]"
                                 >Contact Us</a
                             >
                         </li>
                         <li>
                             <a
                                 href={'javascript:void(0);'}
-                                class="transition-colors hover:text-violet-600"
+                                class="transition-colors hover:text-[#2ecc71]"
                                 >Privacy Policy</a
                             >
                         </li>
