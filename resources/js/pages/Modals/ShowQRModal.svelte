@@ -20,7 +20,14 @@
         qrDataUrl = await createQrPngDataUrl(qrConfig);
     });
 
-    function roundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+    function roundedRect(
+        ctx: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        w: number,
+        h: number,
+        r: number,
+    ) {
         ctx.beginPath();
         ctx.moveTo(x + r, y);
         ctx.lineTo(x + w - r, y);
@@ -58,12 +65,24 @@
 
             // Main card with rounded corners
             ctx.save();
-            roundedRect(ctx, padding, padding, cardWidth - padding * 2, cardHeight - padding * 2, radius);
+            roundedRect(
+                ctx,
+                padding,
+                padding,
+                cardWidth - padding * 2,
+                cardHeight - padding * 2,
+                radius,
+            );
             ctx.clip();
 
             // White card background
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(padding, padding, cardWidth - padding * 2, cardHeight - padding * 2);
+            ctx.fillRect(
+                padding,
+                padding,
+                cardWidth - padding * 2,
+                cardHeight - padding * 2,
+            );
 
             // Header gradient section
             const headerHeight = 100;
@@ -72,11 +91,23 @@
             headerGradient.addColorStop(0.5, '#a855f7');
             headerGradient.addColorStop(1, '#9333ea');
             ctx.fillStyle = headerGradient;
-            roundedRect(ctx, padding, padding, cardWidth - padding * 2, headerHeight, radius);
+            roundedRect(
+                ctx,
+                padding,
+                padding,
+                cardWidth - padding * 2,
+                headerHeight,
+                radius,
+            );
             ctx.fill();
 
             // Fix bottom corners of header (make them square)
-            ctx.fillRect(padding, padding + headerHeight - radius, cardWidth - padding * 2, radius);
+            ctx.fillRect(
+                padding,
+                padding + headerHeight - radius,
+                cardWidth - padding * 2,
+                radius,
+            );
 
             // Header text - "PrintSecure"
             ctx.fillStyle = '#ffffff';
@@ -87,18 +118,29 @@
             // Tagline
             ctx.font = '14px system-ui, -apple-system, sans-serif';
             ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.fillText('Smart Document Printing', cardWidth / 2, padding + 72);
+            ctx.fillText('Print Securely', cardWidth / 2, padding + 72);
 
             // Shop name section
             const shopY = padding + headerHeight + 30;
             ctx.fillStyle = '#111827';
             ctx.font = 'bold 18px system-ui, -apple-system, sans-serif';
             const shopName = shop.name || 'Print Shop';
-            ctx.fillText(shopName.length > 28 ? shopName.substring(0, 28) + '...' : shopName, cardWidth / 2, shopY);
+            ctx.fillText(
+                shopName.length > 28
+                    ? shopName.substring(0, 28) + '...'
+                    : shopName,
+                cardWidth / 2,
+                shopY,
+            );
 
             // Decorative line under shop name
             const lineY = shopY + 15;
-            const lineGradient = ctx.createLinearGradient(cardWidth / 2 - 60, 0, cardWidth / 2 + 60, 0);
+            const lineGradient = ctx.createLinearGradient(
+                cardWidth / 2 - 60,
+                0,
+                cardWidth / 2 + 60,
+                0,
+            );
             lineGradient.addColorStop(0, 'transparent');
             lineGradient.addColorStop(0.2, '#8b5cf6');
             lineGradient.addColorStop(0.8, '#8b5cf6');
@@ -113,7 +155,11 @@
             // Instructions
             ctx.fillStyle = '#6b7280';
             ctx.font = '13px system-ui, -apple-system, sans-serif';
-            ctx.fillText('Scan to upload & print documents', cardWidth / 2, lineY + 35);
+            ctx.fillText(
+                'Scan to upload & print documents',
+                cardWidth / 2,
+                lineY + 35,
+            );
 
             // QR Code container with shadow effect
             const qrSize = 220;
@@ -201,7 +247,11 @@
             // Footer text
             ctx.fillStyle = '#9ca3af';
             ctx.font = '12px system-ui, -apple-system, sans-serif';
-            ctx.fillText("India's Smart Printing Service", cardWidth / 2, footerY + 25);
+            ctx.fillText(
+                'PrintSecure - Privacy-First Print Infrastructure',
+                cardWidth / 2,
+                footerY + 25,
+            );
 
             // Website
             ctx.fillStyle = '#8b5cf6';
@@ -262,7 +312,9 @@
             </button>
 
             {#if $page.props.app_env === 'local'}
-               <div class="my-2">QR URL: <code class="break-all">{shop.qr_code_url}</code></div>
+                <div class="my-2">
+                    QR URL: <code class="break-all">{shop.qr_code_url}</code>
+                </div>
             {/if}
         </div>
     </div>

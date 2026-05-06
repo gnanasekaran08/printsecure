@@ -183,7 +183,7 @@
         {:else}
             <div class="pt-2 text-center">
                 <div
-                    class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600"
+                    class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-green-600"
                 >
                     <Printer class="h-7 w-7 text-white" />
                 </div>

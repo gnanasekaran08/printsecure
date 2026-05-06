@@ -42,7 +42,8 @@ class HandleInertiaRequests extends Middleware
             'auth'        => [
                 'user' => $request->user(),
             ],
-            'app_logo'    => asset('logo.png'),
+            'app_logo'    => asset('printsecure.svg'),
+
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }
