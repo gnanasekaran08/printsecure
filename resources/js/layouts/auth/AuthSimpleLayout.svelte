@@ -21,7 +21,7 @@
         <div class="flex flex-col gap-8">
             <div class="flex flex-col items-center gap-4">
                 <Link href={home()} class="flex flex-col items-center gap-2">
-                    <img src={$page.props.app_logo} alt="App Logo" class="w-48" />
+                    <AppLogoIcon class="h-18" />
                     <span class="sr-only">{title}</span>
                 </Link>
                 <div class="space-y-2 text-center">

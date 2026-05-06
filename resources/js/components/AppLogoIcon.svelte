@@ -11,8 +11,7 @@
 
 <img
     src={$page.props.app_logo}
-    alt="App Logo"
+    alt="PrintSecure - Privacy-First Print Infrastructure"
     class={className}
     {...rest}
-
 />

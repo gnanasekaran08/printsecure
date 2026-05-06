@@ -210,7 +210,7 @@
                 <img
                     src={$page.props.app_logo}
                     alt="PrintSecure Logo"
-                    class="w-auto h-8"
+                    class="w-auto h-12"
                 />
             </a>
         </div>
@@ -877,7 +877,7 @@
                         <img
                             src={$page.props.app_logo}
                             alt="PrintSecure Logo"
-                            class="w-auto h-8"
+                            class="w-auto h-12"
                         />
                     </a>
                     <p class="max-w-sm text-slate-600">
