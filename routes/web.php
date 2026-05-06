@@ -8,6 +8,8 @@ use App\Http\Controllers\ShopListController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
+require __DIR__ . '/settings.php';
+
 Route::get('/', [AppController::class, 'index'])->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -23,8 +25,6 @@ Route::post('print/upload', [PrintController::class, 'upload'])->name('print.upl
 Route::post('print/pay', [PrintController::class, 'processPayment'])->name('print.pay');
 Route::post('print/verify-otp', [PrintController::class, 'verifyOtp'])->name('print.verify-otp');
 Route::post('delete-print-job', [PrintController::class, 'deletePrintJobByDocNo'])->name('print.delete-job-by-docno');
-
-require __DIR__ . '/settings.php';
 
 Route::get('cls', function () {
     Artisan::call('cache:clear');
@@ -46,7 +46,7 @@ Route::get('symlink', function () {
     return "Sym link created";
 });
 
-Route::get('migrate-table', function () {
+Route::get('migrate-tables', function () {
     Artisan::call('migrate', ['--force' => true]);
-    return "Tables migrated";
+    return "Tables are migrated successfully!";
 });
