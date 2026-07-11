@@ -46,8 +46,6 @@
                         <th></th>
                         <th>Shop Name</th>
                         <th>Shop Owner</th>
-                        <th>Registered Email</th>
-                        <th>Registered Mobile No</th>
                         <th>Today Stat</th>
                         <th>Action</th>
                     </tr>
@@ -64,14 +62,11 @@
                         <tr>
                             <th>{index + 1}</th>
                             <td>{shop.name}</td>
-                            <td>{shop.owner_name}</td>
-                            <td>{shop.email}</td>
-                            <td>{shop.mobile_number}</td>
                             <td class="text-center">
                                 <div class="text-lg font-semibold">
                                     {shop.today_print_jobs_count}
-                                </div></td
-                            >
+                                </div>
+                            </td>
                             <td>
                                 <button
                                     type="button"
