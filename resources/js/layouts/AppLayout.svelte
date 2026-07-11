@@ -5,13 +5,17 @@
 
     let {
         breadcrumbs = [],
+        headerActions,
+        headerLinks,
         children,
     }: {
         breadcrumbs?: BreadcrumbItem[];
+        headerActions?: Snippet;
+        headerLinks?: Snippet;
         children?: Snippet;
     } = $props();
 </script>
 
-<AppLayout {breadcrumbs}>
+<AppLayout {breadcrumbs} {headerActions} {headerLinks}>
     {@render children?.()}
 </AppLayout>

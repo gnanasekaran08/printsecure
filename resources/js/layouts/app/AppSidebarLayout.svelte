@@ -8,9 +8,13 @@
 
     let {
         breadcrumbs = [],
+        headerActions,
+        headerLinks,
         children,
     }: {
         breadcrumbs?: BreadcrumbItem[];
+        headerActions?: Snippet;
+        headerLinks?: Snippet;
         children?: Snippet;
     } = $props();
 </script>
@@ -18,7 +22,7 @@
 <AppShell variant="sidebar">
     <AppSidebar />
     <AppContent variant="sidebar" class="overflow-x-hidden">
-        <AppSidebarHeader {breadcrumbs} />
+        <AppSidebarHeader {breadcrumbs} {headerActions} {headerLinks} />
         {@render children?.()}
     </AppContent>
 </AppShell>

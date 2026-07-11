@@ -27,9 +27,16 @@
     };
 </script>
 
+{#snippet headerActions()}
+    <a href="/shops/create" class="btn btn-sm btn-primary gap-2">
+        <span class="hidden sm:inline">Add New Shop</span>
+        <span class="sm:hidden">Add</span>
+    </a>
+{/snippet}
+
 <AppHead title="Shops List" />
 
-<AppLayout {breadcrumbs}>
+<AppLayout {breadcrumbs} {headerActions}>
     <div class="h-full overflow-x-auto rounded-xl p-4">
         <div class="overflow-x-auto">
             <table class="table table-zebra table-compact w-full table-sm">
@@ -53,7 +60,7 @@
                             </td>
                         </tr>
                     {/if}
-                    {#each shops?.data || [] as shop, index}
+                    {#each shops?.data || [] as shop, index (shop.id)}
                         <tr>
                             <th>{index + 1}</th>
                             <td>{shop.name}</td>
@@ -66,14 +73,14 @@
                                 </div></td
                             >
                             <td>
-                                <a
-                                    href={'#'}
+                                <button
+                                    type="button"
                                     class="tooltip btn btn-sm btn-ghost tooltip-left p-2"
                                     data-tip="View Print QR Code"
                                     onclick={() => showQRCode(shop)}
                                 >
                                     <QrCode size={18} />
-                                </a>
+                                </button>
                             </td>
                         </tr>
                     {/each}
