@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { page, router } from '@inertiajs/svelte';
+    import { page } from '@inertiajs/svelte';
 
     import {
         Upload,
@@ -13,7 +13,6 @@
         Palette,
         BookOpen,
         ShoppingCart,
-        CreditCard,
         Smartphone,
         ArrowLeft,
         Loader2,
@@ -28,6 +27,21 @@
     import toast, { Toaster } from 'svelte-french-toast';
     import AppHead from '@/components/AppHead.svelte';
     import AppLogoIcon from '@/components/AppLogoIcon.svelte';
+
+    type CachedPrintJob = {
+        id: number;
+        job_uuid: string;
+        doc_no: number | string;
+        status: string;
+        total_cost: number | null;
+        total_pages: number | null;
+        total_copies: number | null;
+        created_at?: string | null;
+        cached_at: string;
+        attachments?: Array<{ filename: string }>;
+    };
+
+    const cachedPrintJobsStorageKey = 'printsecure.cached-print-jobs';
 
     let {
         shop = null,
@@ -50,6 +64,9 @@
     let printJob = $state<any>(null);
     let paymentOtp = $state<string | null>(null);
     let printDocumentNo = $state<string | null>(null);
+    let cachedPrintJobs = $state<CachedPrintJob[]>([]);
+    let showCacheSnackbar = $state(false);
+    let showCachedJobsPanel = $state(false);
 
     // Bottom sheet states
     let showColorSheet = $state(false);
@@ -83,7 +100,87 @@
 
     onMount(() => {
         console.log('Uploading Doc');
+
+        cachedPrintJobs = loadCachedPrintJobs();
+
+        if (cachedPrintJobs.length > 0) {
+            showCacheSnackbar = true;
+        }
     });
+
+    const loadCachedPrintJobs = (): CachedPrintJob[] => {
+        if (typeof window === 'undefined') {
+            return [];
+        }
+
+        try {
+            const storedJobs = window.localStorage.getItem(
+                cachedPrintJobsStorageKey,
+            );
+
+            if (!storedJobs) {
+                return [];
+            }
+
+            const parsedJobs = JSON.parse(storedJobs);
+
+            return Array.isArray(parsedJobs) ? parsedJobs : [];
+        } catch (error) {
+            console.error('Failed to load cached print jobs:', error);
+            return [];
+        }
+    };
+
+    const persistCachedPrintJobs = (jobs: CachedPrintJob[]) => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        window.localStorage.setItem(
+            cachedPrintJobsStorageKey,
+            JSON.stringify(jobs),
+        );
+        cachedPrintJobs = jobs;
+    };
+
+    const cachePrintJob = (job: any) => {
+        const nextJob: CachedPrintJob = {
+            id: job.id,
+            job_uuid: job.job_uuid,
+            doc_no: job.doc_no,
+            status: job.status,
+            total_cost: job.total_cost ?? null,
+            total_pages: job.total_pages ?? null,
+            total_copies: job.total_copies ?? null,
+            created_at: job.created_at ?? null,
+            cached_at: new Date().toISOString(),
+            attachments: (job.attachments || []).map((attachment: any) => ({
+                filename: attachment.filename,
+            })),
+        };
+
+        const existingJobs = loadCachedPrintJobs().filter(
+            (cachedJob) => cachedJob.job_uuid !== nextJob.job_uuid,
+        );
+
+        persistCachedPrintJobs([nextJob, ...existingJobs].slice(0, 10));
+    };
+
+    const removeCachedPrintJob = (jobUuid: string) => {
+        persistCachedPrintJobs(
+            cachedPrintJobs.filter((job) => job.job_uuid !== jobUuid),
+        );
+    };
+
+    const clearCachedPrintJobs = () => {
+        persistCachedPrintJobs([]);
+        showCachedJobsPanel = false;
+        showCacheSnackbar = false;
+    };
+
+    const formatCachedDate = (date: string): string => {
+        return new Date(date).toLocaleString();
+    };
 
     const handleFileSelect = (event: Event) => {
         const input = event.target as HTMLInputElement;
@@ -173,6 +270,13 @@
             if ('success' === status) {
                 paymentOtp = data.otp;
                 printDocumentNo = data.doc_no;
+                const jobToCache = {
+                    ...(data.print_job || printJob),
+                    status: data?.print_job?.status || 'paid',
+                    doc_no: data.doc_no || printJob?.doc_no,
+                };
+                cachePrintJob(jobToCache);
+                showCacheSnackbar = true;
                 currentStep = 'success';
                 toast.success(
                     'Payment successful! Your collection code is ' + paymentOtp,
@@ -284,7 +388,7 @@
             {/if}
 
             <a href="/">
-                <AppLogoIcon class="h-6 w-6" />
+                <AppLogoIcon class="h-6" />
             </a>
             {#if shop}
                 <div class="ml-auto text-right">
@@ -301,7 +405,7 @@
         <!-- Step Indicator -->
         {#if currentStep !== 'success'}
             <div class="mb-8 flex items-center justify-center gap-2">
-                {#each ['upload', 'settings', 'checkout'] as step, i}
+                {#each ['upload', 'settings', 'checkout'] as step, i (step)}
                     {@const isActive =
                         ['upload', 'settings', 'checkout'].indexOf(
                             currentStep,
@@ -363,7 +467,7 @@
                         <h3 class="font-semibold text-slate-800">
                             Selected Files ({files.length})
                         </h3>
-                        {#each files as file, index}
+                        {#each files as file, index (`${file.name}-${index}`)}
                             <div
                                 class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm"
                             >
@@ -747,7 +851,7 @@
                     </p>
 
                     <div class="flex justify-center gap-3">
-                        {#each printDocumentNo?.toString() || '----' as digit}
+                        {#each printDocumentNo?.toString() || '----' as digit, index (`doc-${index}`)}
                             <span
                                 class="flex h-14 w-12 items-center justify-center rounded-xl bg-white/20 text-3xl font-bold"
                             >
@@ -769,7 +873,7 @@
                         Your Documents Printing Code
                     </p>
                     <div class="flex justify-center gap-3">
-                        {#each paymentOtp?.toString() || '----' as digit}
+                        {#each paymentOtp?.toString() || '----' as digit, index (`otp-${index}`)}
                             <span
                                 class="flex h-14 w-12 items-center justify-center rounded-xl bg-white/20 text-3xl font-bold"
                             >
@@ -790,7 +894,7 @@
                         What's Next?
                     </h4>
                     <ul class="space-y-2 text-slate-600">
-                        {#each steps as step, index}
+                        {#each steps as step, index (step.label)}
                             <li class="flex gap-3">
                                 <div class="badge p-2 badge-primary badge-soft">
                                     {index + 1}
@@ -812,13 +916,13 @@
                         If you have collected the documents, Please delete the
                         job to free up space.
                     </p>
-                    <a
-                        href={'javascript:void(0);'}
+                    <button
+                        type="button"
                         class="btn btn-lg w-full shadow-lg bg-red-700 text-white my-2"
                         onclick={() => deleteThisJobFile()}
                     >
                         Yes, delete it.
-                    </a>
+                    </button>
                 </div>
 
                 <!--  -->
@@ -1041,6 +1145,108 @@
                         <span class="font-semibold">Tip:</span> Double sided printing
                         saves paper and gives you 10% off!
                     </p>
+                </div>
+            </div>
+        </div>
+    {/if}
+
+    {#if showCachedJobsPanel}
+        <div class="fixed inset-0 z-50">
+            <button
+                type="button"
+                class="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                onclick={() => (showCachedJobsPanel = false)}
+                aria-label="Close cached jobs panel"
+            ></button>
+
+            <div
+                class="absolute inset-x-0 bottom-0 max-h-[70vh] overflow-y-auto rounded-t-3xl bg-white p-5 shadow-2xl"
+            >
+                <div class="mx-auto mb-4 h-1 w-12 rounded-full bg-slate-300"></div>
+                <div class="mb-4 flex items-center justify-between gap-3">
+                    <h3 class="text-lg font-semibold text-slate-800">
+                        Cached Print Jobs
+                    </h3>
+                    <button
+                        type="button"
+                        class="btn btn-ghost btn-xs text-red-500"
+                        onclick={clearCachedPrintJobs}
+                    >
+                        Clear all
+                    </button>
+                </div>
+
+                <div class="space-y-3">
+                    {#each cachedPrintJobs as cachedJob (cachedJob.job_uuid)}
+                        <div class="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-800">
+                                        Doc No: {cachedJob.doc_no}
+                                    </p>
+                                    <p class="text-xs text-slate-500">
+                                        Status: {cachedJob.status}
+                                    </p>
+                                    <p class="text-xs text-slate-500">
+                                        Saved: {formatCachedDate(cachedJob.cached_at)}
+                                    </p>
+                                </div>
+                                <button
+                                    type="button"
+                                    class="btn btn-ghost btn-xs text-red-500"
+                                    onclick={() => removeCachedPrintJob(cachedJob.job_uuid)}
+                                >
+                                    Remove
+                                </button>
+                            </div>
+
+                            <div class="mt-3 flex flex-wrap gap-3 text-xs text-slate-600">
+                                <span>{cachedJob.total_pages ?? 0} pages</span>
+                                <span>{cachedJob.total_copies ?? 0} copies</span>
+                                <span>₹{cachedJob.total_cost ?? 0}</span>
+                                <span>{cachedJob.attachments?.length ?? 0} file(s)</span>
+                            </div>
+
+                            {#if cachedJob.attachments?.length}
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    {#each cachedJob.attachments as attachment (attachment.filename)}
+                                        <span class="rounded-full bg-[#2ecc71]/10 px-2 py-1 text-[11px] text-[#27ae60]">
+                                            {attachment.filename}
+                                        </span>
+                                    {/each}
+                                </div>
+                            {/if}
+                        </div>
+                    {/each}
+                </div>
+            </div>
+        </div>
+    {/if}
+
+    {#if showCacheSnackbar && cachedPrintJobs.length > 0}
+        <div class="fixed bottom-4 left-1/2 z-40 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 rounded-xl border border-[#2ecc71]/20 bg-white p-3 shadow-xl">
+            <div class="flex items-center justify-between gap-3">
+                <p class="text-sm text-slate-700">
+                    {cachedPrintJobs.length} cached print job{cachedPrintJobs.length > 1 ? 's' : ''} available.
+                </p>
+                <div class="flex items-center gap-2">
+                    <button
+                        type="button"
+                        class="btn btn-xs border-none bg-[#2ecc71] text-white hover:bg-[#27ae60]"
+                        onclick={() => {
+                            showCachedJobsPanel = true;
+                            showCacheSnackbar = false;
+                        }}
+                    >
+                        View
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-ghost btn-xs"
+                        onclick={() => (showCacheSnackbar = false)}
+                    >
+                        Dismiss
+                    </button>
                 </div>
             </div>
         </div>
