@@ -9,33 +9,33 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* PrintSecure Custom Theme - Modern & Vibrant */
+/* PrintSecure customer and shop-owner theme. */
 [data-theme="printsecure"] {
-    /* Primary - Indigo/Purple */
-    --p: 255 90 60;
-    --pf: 255 85 55;
-    --pc: 255 100 98;
+    /* Primary - leaf green */
+    --p: 47 143 91;
+    --pf: 38 121 75;
+    --pc: 255 255 255;
 
-    /* Secondary - Coral/Orange */
-    --s: 14 89 55;
-    --sf: 14 84 50;
-    --sc: 14 100 98;
+    /* Secondary - warm gold */
+    --s: 193 124 22;
+    --sf: 161 99 15;
+    --sc: 255 255 255;
 
-    /* Accent - Teal/Cyan */
-    --a: 174 72 56;
-    --af: 174 67 51;
-    --ac: 174 100 98;
+    /* Accent - soft teal */
+    --a: 79 151 145;
+    --af: 58 119 114;
+    --ac: 255 255 255;
 
     /* Neutral */
-    --n: 230 25 18;
-    --nf: 230 30 14;
-    --nc: 230 20 98;
+    --n: 23 34 29;
+    --nf: 18 27 23;
+    --nc: 255 255 255;
 
-    /* Base Colors */
-    --b1: 220 30 99;
-    --b2: 220 28 96;
-    --b3: 220 25 92;
-    --bc: 230 25 18;
+    /* Base colors */
+    --b1: 247 248 245;
+    --b2: 232 244 235;
+    --b3: 220 235 224;
+    --bc: 23 34 29;
 
     /* Status Colors */
     --su: 158 64 52;

@@ -163,20 +163,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 </AppHead>
 
-<div data-theme="printsecure" class="flex min-h-screen flex-col bg-black">
+<div data-theme="printsecure" class="flex min-h-screen flex-col bg-[#f7f8f5] text-[#17221d]">
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-black/80 px-4 py-3 backdrop-blur-xl">
+    <header class="sticky top-0 z-50 border-b border-[#dce6df] bg-white/85 px-4 py-3 backdrop-blur-xl">
         <div class="mx-auto flex max-w-lg items-center gap-3">
-            <a href="/" class="btn btn-circle btn-ghost btn-sm text-white">
+            <a href="/" class="btn btn-circle btn-ghost btn-sm text-[#17221d]">
                 <ArrowLeft class="h-5 w-5" />
             </a>
             <div class="flex items-center gap-2">
                 <div
-                    class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 shadow-md"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg bg-linear-to-br from-[#2f8f5b] to-[#4f9791] shadow-md"
                 >
                     <Printer class="h-4 w-4 text-white" />
                 </div>
-                <span class="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-lg font-bold text-transparent">
+                <span class="bg-linear-to-r from-[#2f8f5b] to-[#4f9791] bg-clip-text text-lg font-bold text-transparent">
                     PrintSecure
                 </span>
             </div>
@@ -188,15 +188,15 @@
         {#if isRedirecting}
             <div class="space-y-6 text-center">
                 <div
-                    class="mx-auto flex h-24 w-24 animate-pulse items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 shadow-xl"
+                    class="mx-auto flex h-24 w-24 animate-pulse items-center justify-center rounded-full bg-linear-to-br from-emerald-500 to-teal-500 shadow-xl"
                 >
                     <QrCode class="h-12 w-12 text-white" />
                 </div>
                 <div>
-                    <h2 class="text-2xl font-bold text-white">QR Code Scanned!</h2>
-                    <p class="mt-2 text-slate-400">Redirecting to upload page...</p>
+                    <h2 class="text-2xl font-bold text-[#17221d]">QR Code Scanned!</h2>
+                    <p class="mt-2 text-[#718078]">Redirecting to upload page...</p>
                 </div>
-                <Loader2 class="mx-auto h-8 w-8 animate-spin text-violet-500" />
+                <Loader2 class="mx-auto h-8 w-8 animate-spin text-[#2f8f5b]" />
             </div>
         {:else if hasPermission === false}
             <!-- No Permission State -->
@@ -207,8 +207,8 @@
                     <CameraOff class="h-12 w-12 text-red-400" />
                 </div>
                 <div>
-                    <h2 class="text-2xl font-bold text-white">Camera Access Required</h2>
-                    <p class="mt-2 max-w-xs text-slate-400">
+                    <h2 class="text-2xl font-bold text-[#17221d]">Camera Access Required</h2>
+                    <p class="mt-2 max-w-xs text-[#718078]">
                         Please enable camera permissions in your browser settings to scan QR codes.
                     </p>
                 </div>
@@ -217,7 +217,7 @@
                         <Camera class="h-5 w-5" />
                         Try Again
                     </button>
-                    <button onclick={goToManualUpload} class="btn btn-ghost btn-lg w-full max-w-xs text-white">
+                    <button onclick={goToManualUpload} class="btn btn-ghost btn-lg w-full max-w-xs text-[#17221d]">
                         <Upload class="h-5 w-5" />
                         Upload Without Scanning
                     </button>
@@ -227,40 +227,40 @@
             <!-- Loading State -->
             <div class="space-y-6 text-center">
                 <div
-                    class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-violet-500/20 shadow-xl"
+                        class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#e8f4eb] shadow-xl"
                 >
-                    <Camera class="h-12 w-12 animate-pulse text-violet-400" />
+                    <Camera class="h-12 w-12 animate-pulse text-[#2f8f5b]" />
                 </div>
                 <div>
-                    <h2 class="text-xl font-bold text-white">Requesting Camera Access</h2>
-                    <p class="mt-2 text-slate-400">Please allow camera access to scan QR codes</p>
+                    <h2 class="text-xl font-bold text-[#17221d]">Requesting Camera Access</h2>
+                    <p class="mt-2 text-[#718078]">Please allow camera access to scan QR codes</p>
                 </div>
-                <Loader2 class="mx-auto h-8 w-8 animate-spin text-violet-500" />
+                <Loader2 class="mx-auto h-8 w-8 animate-spin text-[#2f8f5b]" />
             </div>
         {:else}
             <!-- Scanner View -->
             <div class="w-full max-w-md space-y-6">
                 <!-- Instructions -->
                 <div class="text-center">
-                    <h2 class="text-xl font-bold text-white">Scan Shop QR Code</h2>
-                    <p class="mt-1 text-sm text-slate-400">Point your camera at the QR code at the print shop</p>
+                    <h2 class="text-xl font-bold text-[#17221d]">Scan Shop QR Code</h2>
+                    <p class="mt-1 text-sm text-[#718078]">Point your camera at the QR code at the print shop</p>
                 </div>
 
                 <!-- Scanner Container -->
-                <div class="relative mx-auto aspect-square w-full max-w-[300px] overflow-hidden rounded-3xl">
+                <div class="relative mx-auto aspect-square w-full max-w-75 overflow-hidden rounded-3xl">
                     <!-- Scanner Element -->
                     <div id={SCAN_REGION_ID} bind:this={scannerElement} class="h-full w-full"></div>
 
                     <!-- Overlay Frame -->
                     <div class="pointer-events-none absolute inset-0">
                         <!-- Corner brackets -->
-                        <div class="absolute left-4 top-4 h-12 w-12 border-l-4 border-t-4 border-violet-500 rounded-tl-lg"></div>
-                        <div class="absolute right-4 top-4 h-12 w-12 border-r-4 border-t-4 border-violet-500 rounded-tr-lg"></div>
-                        <div class="absolute bottom-4 left-4 h-12 w-12 border-b-4 border-l-4 border-violet-500 rounded-bl-lg"></div>
-                        <div class="absolute bottom-4 right-4 h-12 w-12 border-b-4 border-r-4 border-violet-500 rounded-br-lg"></div>
+                        <div class="absolute left-4 top-4 h-12 w-12 rounded-tl-lg border-l-4 border-t-4 border-[#2f8f5b]"></div>
+                        <div class="absolute right-4 top-4 h-12 w-12 rounded-tr-lg border-r-4 border-t-4 border-[#2f8f5b]"></div>
+                        <div class="absolute bottom-4 left-4 h-12 w-12 rounded-bl-lg border-b-4 border-l-4 border-[#2f8f5b]"></div>
+                        <div class="absolute bottom-4 right-4 h-12 w-12 rounded-br-lg border-b-4 border-r-4 border-[#2f8f5b]"></div>
 
                         <!-- Scanning line animation -->
-                        <div class="absolute left-4 right-4 top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-transparent via-violet-500 to-transparent animate-pulse"></div>
+                        <div class="absolute left-4 right-4 top-1/2 h-0.5 -translate-y-1/2 animate-pulse bg-linear-to-r from-transparent via-[#2f8f5b] to-transparent"></div>
                     </div>
                 </div>
 
@@ -276,7 +276,7 @@
                 <div class="flex justify-center gap-4">
                     <button
                         onclick={toggleTorch}
-                        class="btn btn-circle btn-lg border-2 border-white/20 bg-white/10 text-white hover:bg-white/20"
+                        class="btn btn-circle btn-lg border-2 border-[#b8d6c3] bg-white text-[#297048] hover:bg-[#e8f4eb]"
                         title={torchEnabled ? 'Turn off flashlight' : 'Turn on flashlight'}
                     >
                         {#if torchEnabled}
@@ -289,8 +289,8 @@
 
                 <!-- Alternative Action -->
                 <div class="pt-4 text-center">
-                    <p class="mb-3 text-sm text-slate-500">Don't have a QR code?</p>
-                    <button onclick={goToManualUpload} class="btn btn-outline btn-lg w-full max-w-xs border-white/30 text-white hover:bg-white/10">
+                    <p class="mb-3 text-sm text-[#718078]">Don't have a QR code?</p>
+                    <button onclick={goToManualUpload} class="btn btn-outline btn-lg w-full max-w-xs border-[#b8d6c3] text-[#297048] hover:bg-[#e8f4eb]">
                         <Upload class="h-5 w-5" />
                         Upload Without Scanning
                     </button>
@@ -301,7 +301,7 @@
 
     <!-- Footer hint -->
     <footer class="px-4 pb-8 pt-4 text-center">
-        <p class="text-xs text-slate-600">
+        <p class="text-xs text-[#8a9890]">
             Scan the QR code displayed at any PrintSecure partner shop
         </p>
     </footer>

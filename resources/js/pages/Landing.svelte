@@ -76,6 +76,7 @@
 </AppHead>
 
 <div
+    data-theme="printsecure"
     class="min-h-screen overflow-hidden bg-[#f7f8f5] text-[#17221d] [font-family:'DM_Sans',sans-serif]"
 >
     <nav

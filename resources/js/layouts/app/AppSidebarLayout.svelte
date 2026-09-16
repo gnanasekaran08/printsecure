@@ -19,10 +19,12 @@
     } = $props();
 </script>
 
-<AppShell variant="sidebar">
-    <AppSidebar />
-    <AppContent variant="sidebar" class="overflow-x-hidden">
-        <AppSidebarHeader {breadcrumbs} {headerActions} {headerLinks} />
-        {@render children?.()}
-    </AppContent>
-</AppShell>
+<div data-theme="printsecure" class="min-h-svh">
+    <AppShell variant="sidebar">
+        <AppSidebar />
+        <AppContent variant="sidebar" class="overflow-x-hidden">
+            <AppSidebarHeader {breadcrumbs} {headerActions} {headerLinks} />
+            {@render children?.()}
+        </AppContent>
+    </AppShell>
+</div>

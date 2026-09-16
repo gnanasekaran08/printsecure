@@ -15,7 +15,7 @@
     } = $props();
 </script>
 
-<div class="min-h-svh bg-[#f7f8f5] p-2 text-[#17221d] sm:p-6 lg:p-10">
+<div data-theme="printsecure" class="min-h-svh bg-[#f7f8f5] p-2 text-[#17221d] sm:p-6 lg:p-10">
     <div class="mx-auto grid min-h-[calc(100svh-1rem)] max-w-6xl overflow-hidden rounded-[1.5rem] border border-[#dce6df] bg-white shadow-[0_24px_80px_rgba(38,67,50,0.1)] sm:min-h-[calc(100svh-3rem)] sm:rounded-[2rem] lg:grid-cols-[0.85fr_1.15fr]">
         <aside class="relative hidden overflow-hidden bg-[#e8f4eb] p-10 lg:flex lg:flex-col lg:justify-between lg:p-12">
             <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full border-[20px] border-[#d3ead9]"></div>
