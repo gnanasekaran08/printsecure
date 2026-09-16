@@ -100,7 +100,7 @@
             {#if canRegister}
                 <div class="text-center text-sm text-muted-foreground">
                     Don't have an account?
-                    <TextLink href={register()}>Sign up</TextLink>
+                    <TextLink href={register()} class="underline underline-offset-4">Register Shop</TextLink>
                 </div>
             {/if}
         {/snippet}

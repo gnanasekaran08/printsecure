@@ -29,7 +29,7 @@
                     Print what matters.<br /><span class="text-[#2f8f5b]">Keep it private.</span>
                 </p>
                 <p class="mt-5 max-w-sm leading-7 text-[#5f806b]">
-                    A simpler way to send documents to a local print shop, without creating another account to manage.
+                    A simpler way to send documents to a local print shop, without sharing personal details.
                 </p>
             </div>
         </aside>
