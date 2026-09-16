@@ -32,4 +32,11 @@ class ShopListController extends Controller
             return redirect()->back()->withErrors(['error' => 'Failed to load shops. Please try again later. ERROR: ' . $e->getMessage()]);
         }
     }
+
+    public function create(Request $request)
+    {
+        return inertia('ShopHandler', [
+            'shop' => null,
+        ]);
+    }
 }

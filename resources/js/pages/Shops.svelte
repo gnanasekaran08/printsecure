@@ -6,9 +6,11 @@
     import { dashboard } from '@/routes';
     import type { BreadcrumbItem } from '@/types';
     import ShowQRModal from './Modals/ShowQRModal.svelte';
+    import ShopHandler from './ShopHandler.svelte';
 
     let { shops } = $props();
     let selectedShop = $state(null);
+    let showCreateShopModal = $state(false);
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -25,13 +27,26 @@
         selectedShop = shop;
         console.log('Show QR code for shop:', shop);
     };
+
+    const openCreateShopModal = (): void => {
+        showCreateShopModal = true;
+    };
+
+    const closeCreateShopModal = (): void => {
+        showCreateShopModal = false;
+        selectedShop = null;
+    };
 </script>
 
 {#snippet headerActions()}
-    <a href="/shops/create" class="btn btn-sm btn-primary gap-2">
+    <button
+        type="button"
+        class="btn btn-sm btn-primary gap-2"
+        onclick={openCreateShopModal}
+    >
         <span class="hidden sm:inline">Add New Shop</span>
         <span class="sm:hidden">Add</span>
-    </a>
+    </button>
 {/snippet}
 
 <AppHead title="Shops List" />
@@ -97,4 +112,51 @@
 
 {#if selectedShop}
     <ShowQRModal shop={selectedShop} onClose={() => (selectedShop = null)} />
+{/if}
+
+{#if showCreateShopModal}
+    <ShopHandler shop={selectedShop} onClose={closeCreateShopModal} />
+    <!-- <dialog class="modal modal-open">
+        <div class="modal-box max-w-md">
+            <h3 class="text-lg font-semibold">Create New Shop</h3>
+            <p class="mt-1 text-sm text-base-content/70">
+                Enter a name to add the shop.
+            </p>
+
+            <form class="mt-5 space-y-4" onsubmit={createShop}>
+                <div class="grid gap-2">
+                    <Label for="shop-name">Shop Name</Label>
+                    <Input
+                        id="shop-name"
+                        name="name"
+                        value={shopName}
+                        oninput={(event) =>
+                            (shopName = (
+                                event.currentTarget as HTMLInputElement
+                            ).value)}
+                        placeholder="Downtown Print Hub"
+                        required
+                    />
+                    <InputError message={shopNameError} />
+                </div>
+
+                {#if createShopNote}
+                    <div class="alert alert-info text-sm">{createShopNote}</div>
+                {/if}
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button
+                        type="button"
+                        class="btn btn-ghost"
+                        onclick={closeCreateShopModal}>Cancel</button
+                    >
+                    <Button type="submit">Create Shop</Button>
+                </div>
+            </form>
+        </div>
+
+        <form method="dialog" class="modal-backdrop">
+            <button type="button" onclick={closeCreateShopModal}>close</button>
+        </form>
+    </dialog> -->
 {/if}
