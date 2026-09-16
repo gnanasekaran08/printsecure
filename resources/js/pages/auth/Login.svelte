@@ -26,7 +26,11 @@
 
 <AppHead title="Log in" />
 
-<AuthBase title="Log in to your account" description="Enter your email and password below to log in">
+<AuthBase title="Welcome back" description="Sign in to manage your PrintSecure shop">
+    <div class="mb-6 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-[#2f8f5b]">
+        <span class="h-2 w-2 rounded-full bg-[#3fb56b]"></span>
+        Secure shop access
+    </div>
     {#if status}
         <div class="mb-4 text-center text-sm font-medium text-green-600">
             {status}
@@ -49,6 +53,7 @@
                         required
                         autocomplete="email"
                         placeholder="email@example.com"
+                        class="h-12 rounded-xl border-[#d7e0d9] bg-[#fbfcfa] focus-visible:ring-[#2f8f5b]"
                     />
                     <InputError message={errors.email} />
                 </div>
@@ -69,6 +74,7 @@
                         required
                         autocomplete="current-password"
                         placeholder="Password"
+                        class="h-12 rounded-xl border-[#d7e0d9] bg-[#fbfcfa] focus-visible:ring-[#2f8f5b]"
                     />
                     <InputError message={errors.password} />
                 </div>
@@ -82,7 +88,7 @@
 
                 <Button
                     type="submit"
-                    class="mt-4 w-full"
+                        class="mt-4 h-12 w-full rounded-xl bg-[#2f8f5b] font-bold text-white shadow-[0_8px_20px_rgba(47,143,91,0.2)] hover:bg-[#26794b]"
                     disabled={processing}
                     data-test="login-button"
                 >

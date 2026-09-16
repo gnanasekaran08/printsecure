@@ -1,944 +1,107 @@
 <script lang="ts">
     import { Link, page } from '@inertiajs/svelte';
     import {
-        Printer,
-        Upload,
-        Shield,
-        Clock,
-        ArrowRight,
-        Zap,
-        Sparkles,
-        FileText,
-        Store,
-        CreditCard,
+        ArrowUpRight,
+        Check,
+        Clock3,
         EyeOff,
-        UserX,
+        FileText,
+        LockKeyhole,
         QrCode,
+        ScanLine,
+        ShieldCheck,
+        Store,
+        Upload,
     } from 'lucide-svelte';
     import AppHead from '@/components/AppHead.svelte';
+    import { dashboard } from '@/routes';
     import { toUrl } from '@/lib/utils';
-    import { dashboard, print } from '@/routes';
 
-    // state_referenced_locally
     let { data } = $props();
     const auth = $derived($page.props.auth);
 
-    const features = [
+    const benefits = [
         {
             icon: EyeOff,
-            title: 'No Account Required',
-            description:
-                'Print instantly without signing up. No email, no registration, no hassle.',
-            gradient: 'from-[#2ecc71] to-[#27ae60]',
-            bgColor: 'bg-[#2ecc71]/10',
-            iconColor: 'text-[#2ecc71]',
+            title: 'Private by default',
+            description: 'No account, no profile, and no personal data trail.',
         },
         {
-            icon: Shield,
-            title: 'Zero Personal Data',
-            description:
-                'We never collect your personal information. Your privacy is our priority.',
-            gradient: 'from-orange-500 to-red-500',
-            bgColor: 'bg-orange-500/10',
-            iconColor: 'text-orange-500',
+            icon: Clock3,
+            title: 'Ready in minutes',
+            description: 'Send a file to a nearby shop and collect when it is ready.',
         },
         {
-            icon: Upload,
-            title: 'Simple Upload',
-            description:
-                "Just upload your files, pay, and collect. It's that simple.",
-            gradient: 'from-emerald-500 to-teal-500',
-            bgColor: 'bg-emerald-500/10',
-            iconColor: 'text-emerald-500',
-        },
-        {
-            icon: Clock,
-            title: 'Instant Printing',
-            description:
-                'Your documents are ready within minutes at nearby partner shops.',
-            gradient: 'from-blue-500 to-cyan-500',
-            bgColor: 'bg-blue-500/10',
-            iconColor: 'text-blue-500',
+            icon: ShieldCheck,
+            title: 'Secure handling',
+            description: 'Files are protected in transit and removed after printing.',
         },
     ];
 
     const steps = [
-        {
-            step: 1,
-            title: 'Scan QR',
-            description: 'Scan the shop QR code to connect instantly',
-            icon: QrCode,
-            color: 'from-cyan-500 to-blue-600',
-        },
-        {
-            step: 2,
-            title: 'Upload',
-            description: 'Select your files and customize print settings',
-            icon: FileText,
-            color: 'from-[#2ecc71] to-[#27ae60]',
-        },
-        {
-            step: 3,
-            title: 'Pay',
-            description: 'Secure checkout with multiple payment options',
-            icon: CreditCard,
-            color: 'from-orange-500 to-pink-500',
-        },
-        {
-            step: 4,
-            title: 'Collect',
-            description: 'Pick up your prints from your chosen shop',
-            icon: Store,
-            color: 'from-emerald-500 to-teal-500',
-        },
-    ];
-
-    const stats = [
-        {
-            value: data?.shops_count,
-            label: 'Partner Shops',
-            icon: Store,
-        },
-        {
-            value: data?.prints_count,
-            label: 'Documents Printed',
-            icon: FileText,
-        },
-        { value: '0', label: 'Data Collected', icon: EyeOff },
-        { value: 'No', label: 'Sign-up Needed for users', icon: UserX },
+        { number: '01', icon: QrCode, title: 'Scan the shop', text: 'Connect to a trusted print shop with one quick scan.' },
+        { number: '02', icon: Upload, title: 'Send your file', text: 'Upload a PDF or document and choose your print settings.' },
+        { number: '03', icon: Store, title: 'Collect securely', text: 'Pay at checkout, then pick up your pages when ready.' },
     ];
 </script>
 
-<AppHead title="Print Anywhere, Securely">
+<AppHead title="Print privately. Collect simply.">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin="anonymous"
-    />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 </AppHead>
 
-<div data-theme="printsecure" class="min-h-screen bg-base-100 font-sans">
-    <!-- Animated Background with Patterns -->
-    <div class="fixed inset-0 -z-10 overflow-hidden">
-        <!-- Gradient Orbs -->
-        <div
-            class="absolute -left-40 -top-40 h-96 w-96 animate-pulse rounded-full bg-gradient-to-br from-[#2ecc71]/30 to-[#27ae60]/30 blur-3xl"
-        ></div>
-        <div
-            class="absolute -bottom-40 -right-40 h-[500px] w-[500px] animate-pulse rounded-full bg-gradient-to-br from-orange-400/20 to-pink-600/20 blur-3xl"
-            style="animation-delay: 1s;"
-        ></div>
-        <div
-            class="absolute left-1/3 top-1/4 h-72 w-72 animate-pulse rounded-full bg-gradient-to-br from-cyan-400/15 to-blue-600/15 blur-3xl"
-            style="animation-delay: 2s;"
-        ></div>
-        <div
-            class="absolute right-1/4 top-2/3 h-64 w-64 animate-pulse rounded-full bg-gradient-to-br from-emerald-400/10 to-teal-600/10 blur-3xl"
-            style="animation-delay: 3s;"
-        ></div>
-
-        <!-- Grid Pattern - Subtle Lines -->
-        <svg
-            class="absolute inset-0 h-full w-full"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <defs>
-                <pattern
-                    id="grid-pattern"
-                    patternUnits="userSpaceOnUse"
-                    width="80"
-                    height="80"
-                >
-                    <!-- Vertical lines -->
-                    <line
-                        x1="80"
-                        y1="0"
-                        x2="80"
-                        y2="80"
-                        stroke="#2ecc71"
-                        stroke-width="0.5"
-                        opacity="0.08"
-                    />
-                    <!-- Horizontal lines -->
-                    <line
-                        x1="0"
-                        y1="80"
-                        x2="80"
-                        y2="80"
-                        stroke="#2ecc71"
-                        stroke-width="0.5"
-                        opacity="0.08"
-                    />
-                    <!-- Intersection dots -->
-                    <circle
-                        cx="80"
-                        cy="80"
-                        r="1.5"
-                        fill="#2ecc71"
-                        opacity="0.12"
-                    />
-                </pattern>
-                <!-- Gradient mask for fade effect -->
-                <radialGradient id="grid-fade" cx="50%" cy="50%" r="70%">
-                    <stop offset="0%" stop-color="white" stop-opacity="1" />
-                    <stop offset="100%" stop-color="white" stop-opacity="0" />
-                </radialGradient>
-                <mask id="grid-mask">
-                    <rect width="100%" height="100%" fill="url(#grid-fade)" />
-                </mask>
-            </defs>
-            <rect
-                width="100%"
-                height="100%"
-                fill="url(#grid-pattern)"
-                mask="url(#grid-mask)"
-            />
-        </svg>
-    </div>
-
-    <!-- Navigation -->
-    <nav
-        class="navbar fixed top-0 z-50 border-b border-base-200/50 bg-base-100/80 px-3 backdrop-blur-xl sm:px-6 lg:px-12"
-    >
-        <div class="navbar-start min-w-0">
-            <a href="/" class="flex items-center gap-3 text-xl font-bold">
-                <img
-                    src={$page.props.app_logo}
-                    alt="PrintSecure Logo"
-                    class="h-10 w-auto max-w-[150px] sm:h-12 sm:max-w-none"
-                />
-            </a>
+<div class="min-h-screen overflow-hidden bg-[#f7f8f5] text-[#17221d] [font-family:'DM_Sans',sans-serif]">
+    <nav class="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
+        <a href="/" class="flex items-center gap-3" aria-label="PrintSecure home">
+            <img src={$page.props.app_logo} alt="PrintSecure" class="h-10 w-auto" />
+        </a>
+        <div class="hidden items-center gap-8 text-sm font-semibold text-[#617069] md:flex">
+            <a href="#why" class="transition-colors hover:text-[#17221d]">Why PrintSecure</a>
+            <a href="#how" class="transition-colors hover:text-[#17221d]">How it works</a>
         </div>
-        <div class="navbar-center hidden lg:flex">
-            <ul class="menu menu-horizontal gap-1 px-1">
-                <li>
-                    <a
-                        href="#features"
-                        class="rounded-lg font-medium text-base-content/70 transition-colors hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
-                    >
-                        Features
-                    </a>
-                </li>
-                <li>
-                    <a
-                        href="#how-it-works"
-                        class="rounded-lg font-medium text-base-content/70 transition-colors hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
-                    >
-                        How it Works
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="navbar-end gap-1 sm:gap-3">
+        <div class="flex items-center gap-2 sm:gap-4">
             {#if auth.user}
-                <Link
-                    href={toUrl(dashboard())}
-                    class="btn btn-sm sm:btn-md btn-ghost font-medium text-base-content/70 hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
-                >
-                    Dashboard
-                </Link>
+                <Link href={toUrl(dashboard())} class="rounded-full px-4 py-2 text-sm font-semibold hover:bg-white">Dashboard</Link>
             {:else}
-                <Link
-                    href="/login"
-                    class="btn btn-sm sm:btn-md btn-ghost px-2 sm:px-4 font-medium text-base-content/70 hover:bg-[#2ecc71]/10 hover:text-[#2ecc71]"
-                >
-                    Login
-                </Link>
-                <Link href="/register" class="btn btn-sm sm:btn-md px-2 sm:px-4 font-medium bg-[#2ecc71] text-white hover:bg-[#27ae60] border-none whitespace-nowrap">
-                    <Store class="h-4 w-4" />
-                    <span class="hidden sm:inline">Shop Owner? Register</span>
-                    <span class="sm:hidden">Register</span>
-                </Link>
+                <Link href="/login" class="hidden rounded-full px-4 py-2 text-sm font-semibold text-[#617069] hover:text-[#17221d] sm:block">Log in</Link>
+                <Link href="/register" class="rounded-full bg-[#17221d] px-4 py-2.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5">For shop owners <ArrowUpRight class="inline h-4 w-4" /></Link>
             {/if}
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen overflow-hidden pt-24 bg-[#faf9fb]">
-        <!-- Hero Background Grid Lines -->
-        <div class="absolute inset-0 -z-10">
-            <!-- Base Grid Lines - High visibility -->
-            <div
-                class="absolute inset-0"
-                style="background-image: linear-gradient(to right, rgba(180, 180, 195, 0.8) 1px, transparent 1px), linear-gradient(to bottom, rgba(180, 180, 195, 0.8) 1px, transparent 1px); background-size: 40px 40px;"
-            ></div>
-
-            <!-- Gradient overlay for colorful effect -->
-            <div
-                class="absolute inset-0 bg-gradient-to-br from-pink-200/60 via-transparent to-orange-200/50"
-            ></div>
-            <div
-                class="absolute inset-0 bg-gradient-to-tl from-[#2ecc71]/20 via-transparent to-cyan-200/40"
-            ></div>
-
-            <!-- Center fade to white -->
-            <div
-                class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.85)_0%,transparent_60%)]"
-            ></div>
-        </div>
-
-        <style>
-            @keyframes float {
-                0%,
-                100% {
-                    transform: translateY(0) rotate(var(--rotate, 0deg));
-                }
-                50% {
-                    transform: translateY(-20px) rotate(var(--rotate, 0deg));
-                }
-            }
-        </style>
-
-        <div
-            class="mx-auto flex max-w-7xl flex-col items-center gap-16 px-6 py-20 lg:flex-row-reverse lg:gap-20 lg:px-12"
-        >
-            <!-- Printer Illustration -->
-            <div class="relative flex-1">
-                <div class="relative mx-auto w-full max-w-md">
-                    <!-- Printer Image Container -->
-                    <div class="relative mb-8 flex justify-center">
-                        <div class="relative">
-                            <div
-                                class="flex h-56 w-80 items-center justify-center rounded-3xl bg-gradient-to-br from-slate-50 via-[#2ecc71]/5 to-[#2ecc71]/10"
-                            >
-                                <!-- Stylized Printer Illustration -->
-                                <svg
-                                    viewBox="0 0 200 160"
-                                    class="h-48 w-60"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <!-- Shadow -->
-                                    <ellipse
-                                        cx="100"
-                                        cy="155"
-                                        rx="70"
-                                        ry="5"
-                                        fill="#e2e8f0"
-                                    />
-                                    <!-- Printer Body -->
-                                    <rect
-                                        x="20"
-                                        y="50"
-                                        width="160"
-                                        height="80"
-                                        rx="12"
-                                        fill="url(#printerGradient)"
-                                        stroke="#2ecc71"
-                                        stroke-width="2"
-                                    />
-                                    <!-- Paper Input -->
-                                    <rect
-                                        x="50"
-                                        y="20"
-                                        width="100"
-                                        height="35"
-                                        rx="6"
-                                        fill="#f1f5f9"
-                                        stroke="#cbd5e1"
-                                        stroke-width="2"
-                                    />
-                                    <!-- Paper Stack Lines -->
-                                    <line
-                                        x1="60"
-                                        y1="30"
-                                        x2="140"
-                                        y2="30"
-                                        stroke="#e2e8f0"
-                                        stroke-width="2"
-                                    />
-                                    <line
-                                        x1="60"
-                                        y1="38"
-                                        x2="140"
-                                        y2="38"
-                                        stroke="#e2e8f0"
-                                        stroke-width="2"
-                                    />
-                                x``    <!-- Paper Coming Out -->
-                                    <rect
-                                        x="60"
-                                        y="125"
-                                        width="80"
-                                        height="32"
-                                        rx="3"
-                                        fill="white"
-                                        stroke="#e2e8f0"
-                                        stroke-width="2"
-                                    />
-                                    <line
-                                        x1="72"
-                                        y1="135"
-                                        x2="128"
-                                        y2="135"
-                                        stroke="#2ecc71"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                    />
-                                    <line
-                                        x1="72"
-                                        y1="143"
-                                        x2="118"
-                                        y2="143"
-                                        stroke="#5dd891"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                    />
-                                    <line
-                                        x1="72"
-                                        y1="151"
-                                        x2="108"
-                                        y2="151"
-                                        stroke="#a8edbd"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                    />
-                                    <!-- Control Panel -->
-                                    <rect
-                                        x="128"
-                                        y="68"
-                                        width="40"
-                                        height="28"
-                                        rx="6"
-                                        fill="#1e1b4b"
-                                    />
-                                    <circle
-                                        cx="140"
-                                        cy="82"
-                                        r="5"
-                                        fill="#22c55e"
-                                    >
-                                        <animate
-                                            attributeName="opacity"
-                                            values="1;0.5;1"
-                                            dur="2s"
-                                            repeatCount="indefinite"
-                                        />
-                                    </circle>
-                                    <circle
-                                        cx="158"
-                                        cy="82"
-                                        r="5"
-                                        fill="#f97316"
-                                    />
-                                    <!-- Scanner Line -->
-                                    <rect
-                                        x="35"
-                                        y="95"
-                                        width="85"
-                                        height="4"
-                                        rx="2"
-                                        fill="url(#scannerGradient)"
-                                    >
-                                        <animate
-                                            attributeName="x"
-                                            values="35;80;35"
-                                            dur="3s"
-                                            repeatCount="indefinite"
-                                        />
-                                    </rect>
-                                    <!-- Glossy Highlight -->
-                                    <rect
-                                        x="25"
-                                        y="55"
-                                        width="60"
-                                        height="15"
-                                        rx="4"
-                                        fill="white"
-                                        opacity="0.2"
-                                    />
-                                    <!-- Gradients -->
-                                    <defs>
-                                        <linearGradient
-                                            id="printerGradient"
-                                            x1="20"
-                                            y1="50"
-                                            x2="20"
-                                            y2="130"
-                                        >
-                                            <stop
-                                                offset="0%"
-                                                stop-color="#f8fafc"
-                                            />
-                                            <stop
-                                                offset="100%"
-                                                stop-color="#e2e8f0"
-                                            />
-                                        </linearGradient>
-                                        <linearGradient
-                                            id="scannerGradient"
-                                            x1="0%"
-                                            y1="0%"
-                                            x2="100%"
-                                            y2="0%"
-                                        >
-                                            <stop
-                                                offset="0%"
-                                                stop-color="#2ecc71"
-                                            />
-                                            <stop
-                                                offset="50%"
-                                                stop-color="#1abc9c"
-                                            />
-                                            <stop
-                                                offset="100%"
-                                                stop-color="#2ecc71"
-                                            />
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                            </div>
-                            <!-- Status Badge -->
-                            <div
-                                class="absolute -right-2 -top-2 flex items-center gap-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-3 py-1.5 text-xs font-semibold text-white"
-                            >
-                                <span
-                                    class="h-2 w-2 animate-pulse rounded-full bg-white"
-                                ></span>
-                                Ready
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Features -->
-                    <div class="flex justify-center gap-6">
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2ecc71]/10"
-                            >
-                                <Shield class="h-5 w-5 text-[#2ecc71]" />
-                            </div>
-                            <span class="text-sm font-medium text-slate-700"
-                                >Secure</span
-                            >
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100"
-                            >
-                                <Zap class="h-5 w-5 text-orange-500" />
-                            </div>
-                            <span class="text-sm font-medium text-slate-700"
-                                >Instant</span
-                            >
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100"
-                            >
-                                <EyeOff class="h-5 w-5 text-emerald-500" />
-                            </div>
-                            <span class="text-sm font-medium text-slate-700"
-                                >Private</span
-                            >
-                        </div>
-                    </div>
+    <main>
+        <section class="relative mx-auto grid max-w-7xl items-center gap-14 px-6 pb-20 pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:px-10 lg:pb-28 lg:pt-20">
+            <div class="relative z-10 max-w-2xl">
+                <div class="mb-7 inline-flex items-center gap-2 rounded-full border border-[#b8d6c3] bg-[#e8f4eb] px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#297048]"><span class="h-2 w-2 rounded-full bg-[#38a169]"></span>Print without a paper trail</div>
+                <h1 class="max-w-xl text-5xl font-semibold leading-[0.98] tracking-[-0.05em] text-[#17221d] sm:text-6xl lg:text-8xl [font-family:'Space_Grotesk',sans-serif]">Your files.<br /><span class="text-[#2f8f5b]">Your privacy.</span></h1>
+                <p class="mt-7 max-w-lg text-lg leading-8 text-[#617069] sm:text-xl">Upload, pay, and collect your prints from a local shop. PrintSecure keeps the whole handoff quick, private, and refreshingly simple.</p>
+                <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+                    <Link href="/scan" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#2f8f5b] px-6 py-4 text-sm font-bold text-white shadow-[0_10px_30px_rgba(47,143,91,0.24)] transition-all hover:-translate-y-1 hover:bg-[#26794b]"><ScanLine class="h-5 w-5" />Find a print shop</Link>
+                    <a href="#how" class="inline-flex items-center justify-center gap-2 rounded-full border border-[#cad4ce] bg-white/60 px-6 py-4 text-sm font-bold text-[#17221d] transition-colors hover:bg-white">See how it works <ArrowUpRight class="h-5 w-5" /></a>
                 </div>
+                <div class="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-[#617069]"><span class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-[#2f8f5b]" />No sign-up</span><span class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-[#2f8f5b]" />Auto-delete</span><span class="inline-flex items-center gap-2"><Check class="h-4 w-4 text-[#2f8f5b]" />Secure upload</span></div>
             </div>
 
-            <!-- Hero Text -->
-            <div class="flex-1 text-center lg:text-left">
-                <!-- Decorative element -->
-                <div
-                    class="mb-6 flex items-center justify-center gap-4 lg:justify-start"
-                >
-                    <div
-                        class="h-px w-12 bg-gradient-to-r from-transparent to-[#2ecc71]"
-                    ></div>
-                    <div
-                        class="inline-flex items-center gap-2 rounded-full border border-[#2ecc71]/30 bg-gradient-to-r from-[#2ecc71]/5 to-[#2ecc71]/10 px-5 py-2.5 text-sm font-semibold text-[#2ecc71] shadow-sm"
-                    >
-                        <Shield class="h-4 w-4" />
-                        100% Secure & Private
+            <div class="relative mx-auto w-full max-w-xl lg:justify-self-end">
+                <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full border border-[#d5e7da] bg-[#e6f3e9] sm:h-40 sm:w-40"></div>
+                <div class="relative overflow-hidden rounded-[2rem] border border-[#d7e0d9] bg-white p-4 shadow-[0_24px_80px_rgba(38,67,50,0.12)] sm:p-6">
+                    <div class="flex items-center justify-between border-b border-[#edf0ed] pb-5"><div class="flex items-center gap-2 text-sm font-bold"><span class="h-2.5 w-2.5 rounded-full bg-[#3fb56b]"></span>Secure print job</div><span class="rounded-full bg-[#edf8ef] px-3 py-1 text-xs font-bold text-[#2f8f5b]">Ready</span></div>
+                    <div class="grid gap-4 py-6 sm:grid-cols-[1fr_0.72fr]">
+                        <div class="rounded-2xl bg-[#f5f7f4] p-5"><div class="mb-6 flex items-start justify-between"><FileText class="h-7 w-7 text-[#2f8f5b]" /><span class="text-xs font-semibold text-[#8a9890]">PDF · 2.4 MB</span></div><div class="space-y-2.5"><div class="h-2 w-4/5 rounded bg-[#d3ddd5]"></div><div class="h-2 w-full rounded bg-[#d3ddd5]"></div><div class="h-2 w-3/5 rounded bg-[#d3ddd5]"></div><div class="mt-5 h-2 w-full rounded bg-[#e0e7e1]"></div><div class="h-2 w-11/12 rounded bg-[#e0e7e1]"></div></div><div class="mt-8 text-xs font-bold text-[#617069]">Project brief.pdf</div></div>
+                        <div class="flex flex-col justify-between rounded-2xl bg-[#e8f4eb] p-5 text-[#17221d]"><div><div class="mb-2 text-xs font-semibold uppercase tracking-[0.15em] text-[#5f806b]">Connected shop</div><div class="text-lg font-bold">Corner Copy</div><div class="mt-1 text-sm text-[#5f806b]">0.4 mi away</div></div><div class="mt-8 border-t border-[#c9dfcf] pt-4"><div class="flex items-center gap-2 text-sm font-semibold"><LockKeyhole class="h-4 w-4 text-[#2f8f5b]" />Encrypted upload</div><div class="mt-3 text-2xl font-bold">$2.40</div></div></div>
                     </div>
-                    <div
-                        class="h-px w-12 bg-gradient-to-l from-transparent to-[#2ecc71]"
-                    ></div>
+                    <div class="flex items-center justify-between rounded-xl bg-[#e8f4eb] px-4 py-3 text-sm font-semibold text-[#297048]"><span class="inline-flex items-center gap-2"><span class="h-2 w-2 animate-pulse rounded-full bg-[#2f8f5b]"></span>Printing now</span><span>2 mins</span></div>
                 </div>
-
-                <h1
-                    class="mb-6 text-5xl font-extrabold leading-[1.1] tracking-tight lg:text-7xl"
-                >
-                    <span class="block text-slate-800"
-                        >Print <span
-                            class="relative inline-block bg-gradient-to-r from-[#2ecc71] via-[#27ae60] to-[#1abc9c] bg-clip-text text-transparent"
-                        >
-                            Secure
-                            <svg
-                                class="absolute -bottom-2 left-0 w-full"
-                                viewBox="0 0 300 12"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    d="M2 8C50 2 100 2 150 6C200 10 250 4 298 8"
-                                    stroke="url(#underline-gradient)"
-                                    stroke-width="4"
-                                    stroke-linecap="round"
-                                />
-                                <defs>
-                                    <linearGradient
-                                        id="underline-gradient"
-                                        x1="0"
-                                        y1="0"
-                                        x2="300"
-                                        y2="0"
-                                    >
-                                        <stop
-                                            offset="0%"
-                                            stop-color="#2ecc71"
-                                        />
-                                        <stop
-                                            offset="50%"
-                                            stop-color="#27ae60"
-                                        />
-                                        <stop
-                                            offset="100%"
-                                            stop-color="#1abc9c"
-                                        />
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-                        </span></span
-                    >
-                </h1>
-
-                <p
-                    class="mb-10 text-lg leading-relaxed text-slate-600 lg:text-xl lg:leading-relaxed"
-                >
-                    Upload your documents securely, and pay then collect your
-                    prints from shops. Doesn't need to expose the your personal
-                    details.
-                    <span class="font-medium text-[#2ecc71]"
-                        >No sign-up required</span
-                    >, no personal data collected. Your privacy matters.
-                </p>
-
-                <div
-                    class="flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start"
-                >
-                    <Link
-                        href="/scan"
-                        class="group btn btn-lg gap-2 bg-gradient-to-r from-[#2ecc71] via-[#27ae60] to-[#1abc9c] text-white shadow-xl shadow-[#2ecc71]/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#2ecc71]/40"
-                    >
-                        <QrCode class="h-5 w-5" />
-                        Scan QR Code
-                    </Link>
-                    <!-- <Link
-                        href={toUrl(print())}
-                        class="btn btn-lg gap-2 border-2 border-violet-200 bg-white/80 text-violet-600 backdrop-blur-sm transition-all duration-300 hover:border-violet-300 hover:bg-violet-50 hover:shadow-lg"
-                    >
-                        Upload Files
-                        <ArrowRight
-                            class="h-5 w-5 transition-transform group-hover:translate-x-1"
-                        />
-                    </Link> -->
-                </div>
-
-                <!-- Trust indicators -->
-                <div
-                    class="mt-10 flex flex-wrap items-center justify-center gap-6 lg:justify-start"
-                >
-                    <div class="flex items-center gap-2 text-sm text-slate-500">
-                        <div
-                            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100"
-                        >
-                            <Shield class="h-4 w-4 text-emerald-600" />
-                        </div>
-                        <span>256-bit Encryption</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-slate-500">
-                        <div
-                            class="flex h-8 w-8 items-center justify-center rounded-full bg-[#2ecc71]/10"
-                        >
-                            <EyeOff class="h-4 w-4 text-[#2ecc71]" />
-                        </div>
-                        <span>Zero Data Storage</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-slate-500">
-                        <div
-                            class="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100"
-                        >
-                            <Clock class="h-4 w-4 text-orange-600" />
-                        </div>
-                        <span>Auto-Delete After Print</span>
-                    </div>
-                </div>
+                <div class="absolute -bottom-6 -left-7 hidden items-center gap-3 rounded-2xl border border-[#d7e0d9] bg-white px-4 py-3 text-sm font-bold shadow-lg sm:flex"><div class="rounded-xl bg-[#fff2d8] p-2 text-[#c17c16]"><EyeOff class="h-5 w-5" /></div><span>Nothing stored<br /><small class="font-medium text-[#8a9890]">after collection</small></span></div>
             </div>
-        </div>
-    </section>
+        </section>
+    <section id="how" class="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32"><div class="grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24"><div><p class="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-[#2f8f5b]">A better handoff</p><h2 class="text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl [font-family:'Space_Grotesk',sans-serif]">Three steps.<br />Zero friction.</h2><p class="mt-5 max-w-sm leading-7 text-[#718078]">No accounts to remember and no confusing queues. Just a clear path from file to finished page.</p></div><div class="divide-y divide-[#dfe7e1] border-y border-[#dfe7e1]">{#each steps as step}<div class="group flex gap-5 py-7 sm:gap-8"><span class="pt-1 text-sm font-bold text-[#a5b2aa]">{step.number}</span><div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#cce0d1] text-[#2f8f5b] transition-colors group-hover:bg-[#2f8f5b] group-hover:text-white"><step.icon class="h-5 w-5" /></div><div><h3 class="text-lg font-bold">{step.title}</h3><p class="mt-1 text-sm leading-6 text-[#718078]">{step.text}</p></div></div>{/each}</div></div></section>
 
-    <!-- Stats Section - Vibrant -->
-    <section
-        class="relative overflow-hidden bg-gradient-to-r from-[#2ecc71] via-[#27ae60] to-[#1abc9c] py-16"
-    >
-        <div
-            class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=''30'' height=''30'' viewBox=''0 0 30 30'' fill=''none'' xmlns=''http://www.w3.org/2000/svg''%3E%3Ccircle cx=''2'' cy=''2'' r=''1'' fill=''white'' fill-opacity=''0.1''/%3E%3C/svg%3E')]"
-        ></div>
-        <div class="relative mx-auto max-w-6xl px-6 lg:px-12">
-            <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
-                {#each stats as stat}
-                    <div class="group text-center">
-                        <div
-                            class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm transition-transform group-hover:scale-110"
-                        >
-                            <stat.icon class="h-6 w-6 text-white" />
-                        </div>
-                        <p class="text-3xl font-bold text-white lg:text-4xl">
-                            {stat.value}
-                        </p>
-                        <p class="text-sm font-medium text-white/70">
-                            {stat.label}
-                        </p>
-                    </div>
-                {/each}
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section - Colorful Cards -->
-    <section id="features" class="py-28">
-        <div class="mx-auto max-w-6xl px-6 lg:px-12">
-            <div class="mb-20 text-center">
-                <div
-                    class="mb-4 inline-flex items-center gap-2 rounded-full bg-[#2ecc71]/10 px-4 py-2 text-sm font-semibold text-[#2ecc71]"
-                >
-                    <Zap class="h-4 w-4" />
-                    Features
-                </div>
-                <h2 class="mb-4 text-4xl font-bold lg:text-5xl">
-                    Why Choose
-                    <span
-                        class="bg-gradient-to-r from-[#2ecc71] to-[#1abc9c] bg-clip-text text-transparent"
-                    >
-                        PrintSecure
-                    </span>
-                    ?
-                </h2>
-                <p class="mx-auto max-w-2xl text-lg text-slate-600">
-                    Experience the future of printing with our secure,
-                    convenient, and affordable service.
-                </p>
-            </div>
-            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-                {#each features as feature}
-                    <div
-                        class="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-8 shadow-xl shadow-slate-200/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
-                    >
-                        <!-- Hover Gradient Overlay -->
-                        <div
-                            class="absolute inset-0 bg-gradient-to-br {feature.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-5"
-                        ></div>
-
-                        <div class="relative">
-                            <div
-                                class="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br {feature.gradient} shadow-lg transition-transform duration-300 group-hover:scale-110"
-                            >
-                                <feature.icon class="h-8 w-8 text-white" />
-                            </div>
-                            <h3 class="mb-3 text-xl font-bold text-slate-800">
-                                {feature.title}
-                            </h3>
-                            <p class="text-slate-600">{feature.description}</p>
-                        </div>
-                    </div>
-                {/each}
-            </div>
-        </div>
-    </section>
-
-    <!-- How it Works Section - Modern Timeline -->
-    <section
-        id="how-it-works"
-        class="bg-gradient-to-b from-slate-50 to-white py-28"
-    >
-        <div class="mx-auto max-w-6xl px-6 lg:px-12">
-            <div class="mb-20 text-center">
-                <div
-                    class="mb-4 inline-flex items-center gap-2 rounded-full bg-orange-100 px-4 py-2 text-sm font-semibold text-orange-700"
-                >
-                    <Sparkles class="h-4 w-4" />
-                    Simple Process
-                </div>
-                <h2 class="mb-4 text-4xl font-bold lg:text-5xl">
-                    How It
-                    <span
-                        class="bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent"
-                        >Works</span
-                    >
-                </h2>
-                <p class="mx-auto max-w-2xl text-lg text-slate-600">
-                    Get your documents printed in four simple steps.
-                </p>
-            </div>
-            <div
-                class="relative grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4"
-            >
-                <!-- Connection Line -->
-                <div
-                    class="absolute left-0 right-0 top-24 hidden h-1 bg-gradient-to-r from-cyan-500 via-orange-500 to-emerald-500 md:block"
-                    style="margin: 0 10%;"
-                ></div>
-
-                {#each steps as step}
-                    <div class="group relative h-full">
-                        <div
-                            class="relative flex h-full flex-col rounded-3xl border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-                        >
-                            <div
-                                class="mx-auto mb-5 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br {step.color} shadow-xl transition-transform duration-300 group-hover:scale-110"
-                            >
-                                <step.icon class="h-8 w-8 text-white" />
-                            </div>
-                            <div
-                                class="absolute -top-3 left-1/2 flex h-7 w-7 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-br {step.color} text-xs font-bold text-white shadow-lg"
-                            >
-                                {step.step}
-                            </div>
-                            <h3
-                                class="mb-2 text-center text-xl font-bold text-slate-800"
-                            >
-                                {step.title}
-                            </h3>
-                            <p
-                                class="flex-grow text-center text-sm text-slate-600"
-                            >
-                                {step.description}
-                            </p>
-                        </div>
-                    </div>
-                {/each}
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section - Gradient with Pattern -->
-    <section class="py-24">
-        <div class="mx-auto max-w-5xl px-6 lg:px-12">
-            <div
-                class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#2ecc71] via-[#27ae60] to-[#1abc9c] p-12 shadow-2xl shadow-[#2ecc71]/30 lg:p-16"
-            >
-                <!-- Pattern Overlay -->
-                <div class="absolute inset-0 opacity-10">
-                    <svg
-                        class="h-full w-full"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <defs>
-                            <pattern
-                                id="grid"
-                                width="40"
-                                height="40"
-                                patternUnits="userSpaceOnUse"
-                            >
-                                <circle cx="20" cy="20" r="1.5" fill="white" />
-                            </pattern>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#grid)" />
-                    </svg>
-                </div>
-
-                <div class="relative text-center">
-                    <h2 class="mb-6 text-4xl font-bold text-white lg:text-5xl">
-                        Partner With Us
-                    </h2>
-                    <p class="mx-auto mb-10 max-w-xl text-lg text-white/80">
-                        Join our growing network of print shops and offer your
-                        customers a seamless, secure printing experience. Zero
-                        sign-up friction for users means more footfall and
-                        happier customers for you.
-                    </p>
-                    <div class="flex justify-center">
-                        <Link
-                            href={'/register'}
-                            class="btn btn-lg bg-white text-[#27ae60] shadow-xl hover:bg-slate-100"
-                        >
-                            Register your shop now!
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer - Clean & Modern -->
-    <footer class="border-t border-slate-200 bg-slate-50 py-16">
-        <div class="mx-auto max-w-6xl px-6 lg:px-12">
-            <div class="grid gap-12 md:grid-cols-4">
-                <div class="md:col-span-2">
-                    <a
-                        href="/"
-                        class="mb-6 flex items-center gap-3 text-xl font-bold"
-                    >
-                        <img
-                            src={$page.props.app_logo}
-                            alt="PrintSecure Logo"
-                            class="w-auto h-12"
-                        />
-                    </a>
-                    <p class="max-w-sm text-slate-600">
-                        Printing made simple. Upload, Pay, and Collect - no
-                        personal data stored.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="mb-4 font-bold text-slate-800">Quick Links</h4>
-                    <ul class="space-y-3 text-slate-600">
-                        <li>
-                            <a
-                                href="#features"
-                                class="transition-colors hover:text-[#2ecc71]"
-                                >Features</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                href="#how-it-works"
-                                class="transition-colors hover:text-[#2ecc71]"
-                                >How it Works</a
-                            >
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="mb-4 font-bold text-slate-800">Support</h4>
-                    <ul class="space-y-3 text-slate-600">
-                        <li>
-                            <a
-                                href={'javascript:void(0);'}
-                                class="transition-colors hover:text-[#2ecc71]"
-                                >Help Center</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                href={'javascript:void(0);'}
-                                class="transition-colors hover:text-[#2ecc71]"
-                                >Contact Us</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                href={'javascript:void(0);'}
-                                class="transition-colors hover:text-[#2ecc71]"
-                                >Privacy Policy</a
-                            >
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div
-                class="mt-12 border-t border-slate-200 pt-8 text-center text-sm text-slate-500"
-            >
-                <p>
-                    &copy; {new Date().getFullYear()} PrintSecure. All rights reserved.
-                </p>
-            </div>
-        </div>
-    </footer>
-</div>
+    <section class="mx-6 mb-20 overflow-hidden rounded-[2rem] border border-[#c9dfcf] bg-[#e8f4eb] lg:mx-auto lg:max-w-7xl"><div class="grid items-center gap-8 px-7 py-12 sm:px-12 lg:grid-cols-[1fr_auto] lg:px-16 lg:py-14"><div><p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#2f8f5b]">For local print shops</p><h2 class="max-w-xl text-3xl font-semibold tracking-[-0.03em] text-[#17221d] sm:text-4xl [font-family:'Space_Grotesk',sans-serif]">Turn nearby footfall into repeat customers.</h2><p class="mt-4 max-w-xl leading-7 text-[#5f806b]">Give customers a faster, more private way to print, while your shop handles the final handoff.</p></div><Link href="/register" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#2f8f5b] px-6 py-4 text-sm font-bold text-white transition-transform hover:-translate-y-1 hover:bg-[#26794b]">Register your shop <ArrowUpRight class="h-5 w-5" /></Link></div></section>
++
++        <section class="mx-6 mb-20 overflow-hidden rounded-[2rem] bg-[#17221d] lg:mx-auto lg:max-w-7xl"><div class="grid items-center gap-8 px-7 py-12 sm:px-12 lg:grid-cols-[1fr_auto] lg:px-16 lg:py-14"><div><p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#80d49d]">For local print shops</p><h2 class="max-w-xl text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl [font-family:'Space_Grotesk',sans-serif]">Turn nearby footfall into repeat customers.</h2><p class="mt-4 max-w-xl leading-7 text-[#a8bbb0]">Give customers a faster, more private way to print, while your shop handles the final handoff.</p></div><Link href="/register" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#a5e5b8] px-6 py-4 text-sm font-bold text-[#17221d] transition-transform hover:-translate-y-1">Register your shop <ArrowUpRight class="h-5 w-5" /></Link></div></section>
++    </main>
++
++    <footer class="mx-auto flex max-w-7xl flex-col gap-4 border-t border-[#e1e8e2] px-6 py-8 text-sm text-[#718078] sm:flex-row sm:items-center sm:justify-between lg:px-10"><div class="font-bold text-[#17221d]">PrintSecure</div><div>Print simply. Keep it private.</div><div>© {new Date().getFullYear()} PrintSecure</div></footer>
++</div>

@@ -14,7 +14,11 @@
 
 <AppHead title="Register" />
 
-<AuthBase title="Create an account" description="Enter your details below to create your account">
+<AuthBase title="Create your shop account" description="Set up your PrintSecure workspace in a few steps">
+    <div class="mb-6 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-[#2f8f5b]">
+        <span class="h-2 w-2 rounded-full bg-[#3fb56b]"></span>
+        Built for local print shops
+    </div>
     <Form
         {...store.form()}
         resetOnSuccess={['password', 'password_confirmation']}
@@ -31,6 +35,7 @@
                         autocomplete="name"
                         name="name"
                         placeholder="Full name"
+                        class="h-12 rounded-xl border-[#d7e0d9] bg-[#fbfcfa] focus-visible:ring-[#2f8f5b]"
                     />
                     <InputError message={errors.name} />
                 </div>
@@ -44,6 +49,7 @@
                         autocomplete="email"
                         name="email"
                         placeholder="email@example.com"
+                        class="h-12 rounded-xl border-[#d7e0d9] bg-[#fbfcfa] focus-visible:ring-[#2f8f5b]"
                     />
                     <InputError message={errors.email} />
                 </div>
@@ -57,6 +63,7 @@
                         autocomplete="new-password"
                         name="password"
                         placeholder="Password"
+                        class="h-12 rounded-xl border-[#d7e0d9] bg-[#fbfcfa] focus-visible:ring-[#2f8f5b]"
                     />
                     <InputError message={errors.password} />
                 </div>
@@ -70,13 +77,14 @@
                         autocomplete="new-password"
                         name="password_confirmation"
                         placeholder="Confirm password"
+                        class="h-12 rounded-xl border-[#d7e0d9] bg-[#fbfcfa] focus-visible:ring-[#2f8f5b]"
                     />
                     <InputError message={errors.password_confirmation} />
                 </div>
 
                 <Button
                     type="submit"
-                    class="mt-2 w-full"
+                        class="mt-2 h-12 w-full rounded-xl bg-[#2f8f5b] font-bold text-white shadow-[0_8px_20px_rgba(47,143,91,0.2)] hover:bg-[#26794b]"
                     disabled={processing}
                     data-test="register-user-button"
                 >
