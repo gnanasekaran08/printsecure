@@ -277,6 +277,24 @@
                 </div>
             </div>
         </section>
+        <section id="why" class="border-y border-[#e1e8e2] bg-white/60">
+            <div class="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
+                <div class="mb-12 max-w-2xl">
+                    <p class="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-[#2f8f5b]">Why PrintSecure</p>
+                    <h2 class="text-4xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl [font-family:'Space_Grotesk',sans-serif]">The easier way to print in public.</h2>
+                    <p class="mt-5 max-w-xl text-lg leading-8 text-[#718078]">Your document should only need to make one trip: from your phone to the printer. PrintSecure keeps the rest quiet, quick, and under your control.</p>
+                </div>
+                <div class="grid gap-4 md:grid-cols-3">
+                    {#each benefits as benefit (benefit.title)}
+                        <article class="rounded-2xl border border-[#dce6df] bg-white p-6 transition-transform hover:-translate-y-1">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e8f4eb] text-[#2f8f5b]"><benefit.icon class="h-6 w-6" /></div>
+                            <h3 class="mt-7 text-xl font-bold">{benefit.title}</h3>
+                            <p class="mt-3 leading-7 text-[#718078]">{benefit.description}</p>
+                        </article>
+                    {/each}
+                </div>
+            </div>
+        </section>
         <section
             id="how"
             class="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32"
@@ -361,5 +379,4 @@
         <div>Print simply. Keep it private.</div>
         <div>© {new Date().getFullYear()} PrintSecure</div>
     </footer>
-    +
 </div>
