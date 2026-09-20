@@ -86,7 +86,6 @@
                     <tr>
                         <th></th>
                         <th>Shop Name</th>
-                        <th>Shop Owner</th>
                         <th>Today Stat</th>
                         <th>Action</th>
                     </tr>
@@ -109,32 +108,32 @@
                                 </div>
                             </td>
                             <td>
-                                <button
-                                    type="button"
-                                    class="tooltip btn btn-sm btn-ghost tooltip-left p-2"
-                                    data-tip="View Print QR Code"
-                                    onclick={() => showQRCode(shop)}
-                                >
-                                    <QrCode size={18} />
-                                </button>
-                            </td>
-                            <td>
-                                <a
-                                    href={'#'}
-                                    class="text-blue-700 tooltip tooltip-left p-2"
-                                    data-tip="Edit Shop"
-                                    onclick={() => editShop(shop)}
-                                >
-                                    <Edit size={18} />
-                                </a>
-                                <a
-                                    href={'#'}
-                                    class="tooltip tooltip-left p-2 text-red-700"
-                                    data-tip="Delete Shop"
-                                    onclick={() => deleteShop(shop)}
-                                >
-                                    <Trash2 size={18} />
-                                </a>
+                                <div class="flex items-center gap-3">
+                                    <a
+                                        href={'#'}
+                                        class="tooltip tooltip-left"
+                                        data-tip="View Print QR Code"
+                                        onclick={() => showQRCode(shop)}
+                                    >
+                                        <QrCode size={18} />
+                                    </a>
+                                    <a
+                                        href={'#'}
+                                        class="text-blue-700 tooltip tooltip-left"
+                                        data-tip="Edit Shop"
+                                        onclick={() => editShop(shop)}
+                                    >
+                                        <Edit size={18} />
+                                    </a>
+                                    <a
+                                        href={'#'}
+                                        class="tooltip tooltip-left text-red-700"
+                                        data-tip="Delete Shop"
+                                        onclick={() => deleteShop(shop)}
+                                    >
+                                        <Trash2 size={18} />
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     {/each}

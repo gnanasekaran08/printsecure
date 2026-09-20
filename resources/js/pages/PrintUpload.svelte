@@ -55,6 +55,17 @@
     let printJob = $state<any>(null);
     let paymentOtp = $state<string | null>(null);
     let printDocumentNo = $state<string | null>(null);
+    let cachedPrintJobs = $state<
+        Array<{
+            printJob: any;
+            paymentOtp: string | null;
+            printDocumentNo: string | null;
+            cachedAt: string;
+        }>
+    >([]);
+    let showCachedJobs = $state(false);
+
+    const PRINT_JOB_CACHE_KEY = 'printsecure.printJob';
 
     // Bottom sheet states
     let showColorSheet = $state(false);
@@ -82,7 +93,19 @@
     const total = $derived(subtotal);
 
     onMount(() => {
-        console.log('Uploading Doc');
+        try {
+            const cachedValue = localStorage.getItem(PRINT_JOB_CACHE_KEY);
+
+            if (cachedValue) {
+                const parsedValue = JSON.parse(cachedValue);
+                cachedPrintJobs = Array.isArray(parsedValue)
+                    ? parsedValue
+                    : [parsedValue];
+            }
+        } catch (error) {
+            console.error('Could not load cached print jobs:', error);
+            cachedPrintJobs = [];
+        }
     });
 
     const handleFileSelect = (event: Event) => {
@@ -173,6 +196,34 @@
             if ('success' === status) {
                 paymentOtp = data.otp;
                 printDocumentNo = data.doc_no;
+                printJob = data.print_job;
+
+                if (printJob) {
+                    const cachedJob = {
+                        printJob,
+                        paymentOtp,
+                        printDocumentNo,
+                        cachedAt: new Date().toISOString(),
+                    };
+
+                    cachedPrintJobs = [
+                        cachedJob,
+                        ...cachedPrintJobs.filter(
+                            (cachedEntry) =>
+                                cachedEntry.printJob?.id !== printJob.id,
+                        ),
+                    ];
+
+                    try {
+                        localStorage.setItem(
+                            PRINT_JOB_CACHE_KEY,
+                            JSON.stringify(cachedPrintJobs),
+                        );
+                    } catch (error) {
+                        console.error('Could not cache print job:', error);
+                    }
+                }
+
                 currentStep = 'success';
                 toast.success(
                     'Payment successful! Your collection code is ' + paymentOtp,
@@ -204,6 +255,14 @@
     const goBack = () => {
         if (currentStep === 'settings') currentStep = 'upload';
         else if (currentStep === 'checkout') currentStep = 'settings';
+    };
+
+    const openCachedJob = (cachedJob: (typeof cachedPrintJobs)[number]) => {
+        printJob = cachedJob.printJob;
+        paymentOtp = cachedJob.paymentOtp;
+        printDocumentNo = cachedJob.printDocumentNo;
+        currentStep = 'success';
+        showCachedJobs = false;
     };
 
     const deleteThisJobFile = async () => {
@@ -494,7 +553,6 @@
                             <ChevronRight class="h-5 w-5 text-slate-400" />
                         </div>
                     </button>
-
                 </div>
 
                 <!-- Summary Preview -->
@@ -891,6 +949,100 @@
     {/if}
 
     <!-- Double-sided pricing and selection are temporarily disabled. -->
+
+    {#if currentStep === 'upload' && cachedPrintJobs.length > 0}
+        <div class="fixed inset-x-0 bottom-0 z-40 px-4 pb-4">
+            <button
+                type="button"
+                class="mx-auto flex w-full max-w-lg items-center justify-between rounded-2xl bg-slate-900 px-5 py-4 text-left text-white shadow-2xl"
+                onclick={() => (showCachedJobs = true)}
+            >
+                <span>
+                    <span class="block text-sm font-semibold">
+                        {cachedPrintJobs.length} saved print job{cachedPrintJobs.length ===
+                        1
+                            ? ''
+                            : 's'}
+                    </span>
+                    <span class="mt-1 block text-xs text-slate-300">
+                        View jobs saved on this device
+                    </span>
+                </span>
+                <ChevronRight class="h-5 w-5" />
+            </button>
+        </div>
+    {/if}
+
+    {#if currentStep === 'upload' && showCachedJobs}
+        <div class="fixed inset-0 z-50">
+            <button
+                type="button"
+                class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                aria-label="Close saved print jobs"
+                onclick={() => (showCachedJobs = false)}
+            ></button>
+
+            <div
+                class="absolute inset-x-0 bottom-0 max-h-[75vh] overflow-y-auto rounded-t-3xl bg-white p-6 shadow-2xl"
+            >
+                <div class="mx-auto max-w-lg">
+                    <div class="mb-5 flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800">
+                                Saved Print Jobs
+                            </h2>
+                            <p class="mt-1 text-sm text-slate-500">
+                                {cachedPrintJobs.length} job{cachedPrintJobs.length ===
+                                1
+                                    ? ''
+                                    : 's'} stored in this browser
+                            </p>
+                        </div>
+                        <button
+                            type="button"
+                            class="btn btn-circle btn-ghost btn-sm"
+                            aria-label="Close saved print jobs"
+                            onclick={() => (showCachedJobs = false)}
+                        >
+                            <X class="h-5 w-5" />
+                        </button>
+                    </div>
+
+                    <div class="space-y-3">
+                        {#each cachedPrintJobs as cachedJob, index (cachedJob.printJob?.id ?? cachedJob.cachedAt)}
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-4 text-left transition-colors hover:border-violet-300 hover:bg-violet-50"
+                                onclick={() => openCachedJob(cachedJob)}
+                            >
+                                <span>
+                                    <span
+                                        class="block font-semibold text-slate-800"
+                                    >
+                                        Document #{cachedJob.printDocumentNo ??
+                                            'NA'}
+                                    </span>
+                                    <span
+                                        class="mt-1 block text-sm text-slate-500"
+                                    >
+                                        Print Code #{cachedJob.paymentOtp ??
+                                            'Unavailable'}
+                                    </span>
+                                    <span
+                                        class="mt-1 block text-sm text-slate-500"
+                                    >
+                                        Total: ₹{cachedJob.printJob
+                                            ?.total_cost ?? 0}
+                                    </span>
+                                </span>
+                                <ChevronRight class="h-5 w-5 text-slate-400" />
+                            </button>
+                        {/each}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {/if}
 </div>
 
 <style>
