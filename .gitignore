@@ -29,3 +29,5 @@ yarn-error.log
 /*.*.zip
 /*.zip
 *.*.zip
+/public/dist
+/public/build
