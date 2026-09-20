@@ -36,13 +36,6 @@ class ShopListController extends Controller
         }
     }
 
-    public function create(Request $request)
-    {
-        return inertia('ShopHandler', [
-            'shop' => null,
-        ]);
-    }
-
     public function store(StoreShopRequest $request): RedirectResponse
     {
         $userId = $request->user()->id;
