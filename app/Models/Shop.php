@@ -15,6 +15,9 @@ class Shop extends Model
         'uuid',
         'name',
         'user_id',
+        'normal_print_price',
+        'color_print_price',
+        'double_sided_print_price',
         'created_by',
         'updated_by',
     ];

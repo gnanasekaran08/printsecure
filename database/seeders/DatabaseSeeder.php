@@ -27,7 +27,10 @@ class DatabaseSeeder extends Seeder
             Shop::factory()
                 ->count(rand(1, 3))
                 ->create([
-                    'user_id' => $user->id,
+                    'user_id'                  => $user->id,
+                    'normal_print_price'       => 1,
+                    'color_print_price'        => 2,
+                    'double_sided_print_price' => 3,
                 ]);
         }
 
