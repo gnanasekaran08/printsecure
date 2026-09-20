@@ -19,7 +19,7 @@
     } = $props();
 </script>
 
-<div data-theme="printsecure" class="min-h-svh">
+<div class="min-h-svh">
     <AppShell variant="sidebar">
         <AppSidebar />
         <AppContent variant="sidebar" class="overflow-x-hidden">
