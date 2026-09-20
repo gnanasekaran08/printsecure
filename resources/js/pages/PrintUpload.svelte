@@ -284,7 +284,7 @@
             {/if}
 
             <a href="/">
-                <AppLogoIcon class="h-6 w-6" />
+                <AppLogoIcon class="h-8 w-auto" />
             </a>
             {#if shop}
                 <div class="ml-auto text-right">
@@ -450,7 +450,7 @@
                                 >
                                     <Minus class="h-4 w-4" />
                                 </button>
-                                <span class="w-8 text-center text-lg font-bold"
+                                <span class="w-8 text-center text-lg font-bold text-slate-800"
                                     >{copies}</span
                                 >
                                 <button
@@ -486,9 +486,9 @@
                                     Color Printing
                                 </p>
                                 <p class="text-sm text-slate-500">
-                                    {isColor
+                                    <!-- {isColor
                                         ? 'Color • ₹15/page'
-                                        : 'Black & White • ₹5/page'}
+                                        : 'Black & White • ₹5/page'} -->
                                 </p>
                             </div>
                             <ChevronRight class="h-5 w-5 text-slate-400" />
@@ -584,7 +584,7 @@
                     <div class="space-y-3 text-sm">
                         <div class="flex justify-between">
                             <span class="text-slate-600">Files</span>
-                            <span class="font-medium"
+                            <span class="font-medium text-slate-800"
                                 >{printJob?.attachments?.length ||
                                     files?.length ||
                                     0} file(s)</span
@@ -592,19 +592,19 @@
                         </div>
                         <div class="flex justify-between">
                             <span class="text-slate-600">Total Pages</span>
-                            <span class="font-medium"
+                            <span class="font-medium text-slate-800"
                                 >{printJob?.total_pages || 0}</span
                             >
                         </div>
                         <div class="flex justify-between">
                             <span class="text-slate-600">Copies</span>
-                            <span class="font-medium"
+                            <span class="font-medium text-slate-800"
                                 >{printJob?.total_copies || 0}</span
                             >
                         </div>
                         <div class="flex justify-between">
                             <span class="text-slate-600">Print Type</span>
-                            <span class="font-medium"
+                            <span class="font-medium text-slate-800"
                                 >{printJob?.is_color
                                     ? 'Color'
                                     : 'Black & White'}</span
@@ -612,7 +612,7 @@
                         </div>
                         <div class="flex justify-between">
                             <span class="text-slate-600">Double Sided</span>
-                            <span class="font-medium"
+                            <span class="font-medium text-slate-800"
                                 >{printJob?.is_double_sided
                                     ? 'Yes'
                                     : 'No'}</span
@@ -641,7 +641,7 @@
                             </div>
                         {/if}
 
-                        <div class="flex justify-between text-lg font-bold">
+                        <div class="flex justify-between text-lg font-bold text-slate-800">
                             <span>Total</span>
                             <span class="text-violet-600"
                                 >₹{printJob?.total_cost || 0}</span
@@ -671,7 +671,7 @@
                     </button>
 
                     <!-- GPay Button -->
-                    <button
+                    <!-- <button
                         onclick={() => processPayment('gpay')}
                         disabled={isProcessingPayment}
                         class="btn btn-lg w-full gap-3 border-2 border-slate-200 bg-white text-slate-800 hover:border-violet-300 hover:bg-violet-50"
@@ -704,17 +704,17 @@
                             </svg>
                             Pay with Google Pay
                         {/if}
-                    </button>
+                    </button> -->
 
                     <!-- UPI / Phone Pay -->
-                    <button
+                    <!-- <button
                         onclick={() => processPayment('gpay')}
                         disabled={isProcessingPayment}
                         class="btn btn-lg w-full gap-3 border-2 border-slate-200 bg-white text-slate-800 hover:border-violet-300 hover:bg-violet-50"
                     >
                         <Smartphone class="h-5 w-5 text-violet-600" />
                         Pay with UPI
-                    </button>
+                    </button> -->
                 </div>
             </div>
         {/if}
@@ -893,7 +893,7 @@
                             <p class="text-lg font-semibold text-slate-800">
                                 Black & White
                             </p>
-                            <p class="text-sm text-slate-500">₹5 per page</p>
+                            <!-- <p class="text-sm text-slate-500">₹5 per page</p> -->
                         </div>
                         {#if !isColor}
                             <div
@@ -923,7 +923,7 @@
                             <p class="text-lg font-semibold text-slate-800">
                                 Full Color
                             </p>
-                            <p class="text-sm text-slate-500">₹15 per page</p>
+                            <!-- <p class="text-sm text-slate-500">₹15 per page</p> -->
                         </div>
                         {#if isColor}
                             <div
