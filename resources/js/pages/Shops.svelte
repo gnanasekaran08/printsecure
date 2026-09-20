@@ -7,10 +7,12 @@
     import type { BreadcrumbItem } from '@/types';
     import ShowQRModal from './Modals/ShowQRModal.svelte';
     import ShopHandler from './ShopHandler.svelte';
+    import { Edit } from 'lucide-svelte';
 
     let { shops } = $props();
     let selectedShop = $state(null);
     let showCreateShopModal = $state(false);
+    let targetView = $state('');
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -25,16 +27,25 @@
 
     const showQRCode = (shop: any) => {
         selectedShop = shop;
+        targetView = 'showQRCode';
         console.log('Show QR code for shop:', shop);
     };
 
     const openCreateShopModal = (): void => {
         showCreateShopModal = true;
+        targetView = 'shop-handler';
     };
 
     const closeCreateShopModal = (): void => {
         showCreateShopModal = false;
         selectedShop = null;
+        targetView = '';
+    };
+
+    const editShop = (shop: any) => {
+        selectedShop = shop;
+        showCreateShopModal = true;
+        targetView = 'shop-handler';
     };
 </script>
 
@@ -92,6 +103,16 @@
                                     <QrCode size={18} />
                                 </button>
                             </td>
+                            <td>
+                                <a
+                                    href={'#'}
+                                    class="tooltip tooltip-left p-2"
+                                    data-tip="Edit Shop"
+                                    onclick={() => editShop(shop)}
+                                >
+                                    <Edit size={18} />
+                                </a>
+                            </td>
                         </tr>
                     {/each}
                     {#if shops?.last_page > 1}
@@ -110,10 +131,10 @@
     </div>
 </AppLayout>
 
-{#if selectedShop}
+{#if selectedShop && 'showQRCode' === targetView}
     <ShowQRModal shop={selectedShop} onClose={() => (selectedShop = null)} />
 {/if}
 
-{#if showCreateShopModal}
+{#if showCreateShopModal && 'shop-handler' === targetView}
     <ShopHandler shop={selectedShop} onClose={closeCreateShopModal} />
 {/if}

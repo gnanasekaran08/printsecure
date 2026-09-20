@@ -3,25 +3,30 @@
     import Label from '@/components/ui/label/Label.svelte';
     import InputError from '@/components/InputError.svelte';
 
-    let { shop: _shop, onClose } = $props();
+    let { shop, onClose } = $props();
 
     let form = useForm({
-        name: '',
-        normal_print_price: 1,
-        color_print_price: 2,
-        double_sided_print_price: 3,
+        name: shop?.name ?? '',
+        normal_print_price: shop?.normal_print_price ?? 1,
+        color_print_price: shop?.color_print_price ?? 2,
+        double_sided_print_price: shop?.double_sided_print_price ?? 3,
+        is_active: shop?.is_active ?? true,
     });
 </script>
 
 <div class="modal modal-open">
     <div class="modal-box max-w-md bg-white text-slate-800">
-        <h3 class="text-lg font-semibold">Create New Shop</h3>
-        <p class="mt-1 text-sm text-slate-600">Enter a name to add the shop.</p>
+        <h3 class="text-lg font-semibold">{shop?.id ? 'Edit Shop' : 'Create New Shop'}</h3>
+        <p class="mt-1 text-sm text-slate-600">Enter a name of the shop.</p>
         <form
             class="mt-5 space-y-4"
             onsubmit={(event) => {
                 event.preventDefault();
-                $form.post('/shops', { onSuccess: onClose });
+                if (shop?.id) {
+                    $form.put(`/shops/${shop.id}`, { onSuccess: onClose });
+                } else {
+                    $form.post('/shops', { onSuccess: onClose });
+                }
             }}
         >
             <div class="grid gap-2">
@@ -98,7 +103,7 @@
                     type="submit"
                     class="btn btn-primary"
                     disabled={$form.processing}
-                    >{$form.processing ? 'Creating...' : 'Create Shop'}</button
+                    >{$form.processing ? (shop?.id ? 'Updating...' : 'Creating...') : 'Save'}</button
                 >
             </div>
         </form>

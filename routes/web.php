@@ -16,6 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/shops', [ShopListController::class, 'index'])->name('shops');
     Route::post('/shops', [ShopListController::class, 'store'])->name('shops.store');
     Route::get('/shops/create', [ShopListController::class, 'create'])->name('shops.create');
+    Route::put('/shops/{id}', [ShopListController::class, 'update'])->name('shops.update');
     Route::get('/print-jobs', [PrintJobListController::class, 'index'])->name('print-jobs');
     Route::post('/print-jobs/{uuid}/delete-files', [PrintJobListController::class, 'removeFiles'])->name('print-jobs.remove-files');
 });

@@ -59,4 +59,19 @@ class ShopListController extends Controller
 
         return to_route('shops')->with('success', 'Shop created successfully.');
     }
+
+    public function update(StoreShopRequest $request, $id): RedirectResponse
+    {
+        $userId = $request->user()->id;
+        $shop   = Shop::query()->findOrFail($id);
+        $shop->update([
+            'name'                     => $request->string('name')->toString(),
+            'normal_print_price'       => $request->validated('normal_print_price'),
+            'color_print_price'        => $request->validated('color_print_price'),
+            'double_sided_print_price' => $request->validated('double_sided_print_price'),
+            'updated_by'               => $userId,
+        ]);
+
+        return to_route('shops')->with('success', 'Shop updated successfully.');
+    }
 }
