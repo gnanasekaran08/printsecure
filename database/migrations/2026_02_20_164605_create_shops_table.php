@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('normal_print_price', 8, 2);
             $table->decimal('color_print_price', 8, 2);
             $table->decimal('double_sided_print_price', 8, 2);
+            $table->boolean('is_active')->default(true);
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('created_by')->index();
             $table->unsignedBigInteger('updated_by')->index()->nullable();

@@ -18,6 +18,7 @@ class Shop extends Model
         'normal_print_price',
         'color_print_price',
         'double_sided_print_price',
+        'is_active',
         'created_by',
         'updated_by',
     ];
