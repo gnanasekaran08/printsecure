@@ -1,9 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreShopRequest;
 use App\Models\Shop;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ShopListController extends Controller
 {
@@ -11,7 +14,7 @@ class ShopListController extends Controller
     {
         try {
             $shops = Shop::query()
-                ->when("shop" === auth()->user()->type, fn($query) => $query->where('user_id', auth()->id()))
+                ->when(auth()->user()->type === 'shop', fn($query) => $query->where('user_id', auth()->id()))
                 ->withCount('today_print_jobs')->orderBy('created_at', 'desc')
                 ->paginate(10);
 
@@ -24,6 +27,7 @@ class ShopListController extends Controller
                     'qr_code_url'            => route('print', ['shop_uuid' => $shop->uuid]),
                 ];
             });
+
             return inertia('Shops', [
                 'shops' => $shops->toArray(),
             ]);
@@ -37,5 +41,22 @@ class ShopListController extends Controller
         return inertia('ShopHandler', [
             'shop' => null,
         ]);
+    }
+
+    public function store(StoreShopRequest $request): RedirectResponse
+    {
+        $userId = $request->user()->id;
+
+        Shop::query()->create([
+            'uuid'                     => (string) Str::uuid(),
+            'name'                     => $request->string('name')->toString(),
+            'normal_print_price'       => $request->validated('normal_print_price'),
+            'color_print_price'        => $request->validated('color_print_price'),
+            'double_sided_print_price' => $request->validated('double_sided_print_price'),
+            'user_id'                  => $userId,
+            'created_by'               => $userId,
+        ]);
+
+        return to_route('shops')->with('success', 'Shop created successfully.');
     }
 }

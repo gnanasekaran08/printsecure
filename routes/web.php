@@ -14,6 +14,7 @@ Route::get('/', [AppController::class, 'index'])->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/shops', [ShopListController::class, 'index'])->name('shops');
+    Route::post('/shops', [ShopListController::class, 'store'])->name('shops.store');
     Route::get('/shops/create', [ShopListController::class, 'create'])->name('shops.create');
     Route::get('/print-jobs', [PrintJobListController::class, 'index'])->name('print-jobs');
     Route::post('/print-jobs/{uuid}/delete-files', [PrintJobListController::class, 'removeFiles'])->name('print-jobs.remove-files');
@@ -35,19 +36,22 @@ Route::get('cls', function () {
     Artisan::call('optimize:clear');
     $appVersion = app()->version();
     $phpVersion = phpversion();
-    echo "App version: " . $appVersion;
-    echo "<br>";
-    echo "PHP version: " . $phpVersion;
-    echo "<br>";
-    return "Cache is cleared";
+    echo 'App version: ' . $appVersion;
+    echo '<br>';
+    echo 'PHP version: ' . $phpVersion;
+    echo '<br>';
+
+    return 'Cache is cleared';
 });
 
 Route::get('symlink', function () {
     Artisan::call('storage:link');
-    return "Sym link created";
+
+    return 'Sym link created';
 });
 
 Route::get('migrate-tables', function () {
     Artisan::call('migrate', ['--force' => true]);
-    return "Tables are migrated successfully!";
+
+    return 'Tables are migrated successfully!';
 });

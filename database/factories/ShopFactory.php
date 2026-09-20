@@ -16,11 +16,14 @@ class ShopFactory extends Factory
     public function definition(): array
     {
         return [
-            'uuid'       => $this->faker->uuid(),
-            'name'       => $this->faker->company(),
-            'user_id'    => 2,
-            'created_by' => 1, // Assuming a default user ID for created_by
-            'updated_by' => 1, // Assuming no updates initially
+            'uuid'                     => $this->faker->uuid(),
+            'name'                     => $this->faker->company(),
+            'normal_print_price'       => 1,
+            'color_print_price'        => 2,
+            'double_sided_print_price' => 3,
+            'user_id'                  => 2,
+            'created_by'               => 1, // Assuming a default user ID for created_by
+            'updated_by'               => 1, // Assuming no updates initially
         ];
     }
 }

@@ -1,43 +1,43 @@
 <script lang="ts">
     import { useForm } from '@inertiajs/svelte';
-    import Button from '@/components/ui/button/Button.svelte';
-    import Input from '@/components/ui/input/Input.svelte';
     import Label from '@/components/ui/label/Label.svelte';
+    import InputError from '@/components/InputError.svelte';
 
     let { shop: _shop, onClose } = $props();
 
-    const createShop = (event: SubmitEvent): void => {
-        event.preventDefault();
-        console.log('Create shop action triggered.');
-    };
-
     let form = useForm({
-        name: null,
+        name: '',
         normal_print_price: 1,
         color_print_price: 2,
         double_sided_print_price: 3,
     });
 </script>
 
-<dialog class="modal modal-open">
+<div class="modal modal-open">
     <div class="modal-box max-w-md bg-white text-slate-800">
         <h3 class="text-lg font-semibold">Create New Shop</h3>
-        <p class="mt-1 text-sm text-base-content/70">
-            Enter a name to add the shop.
-        </p>
-
-        <form class="mt-5 space-y-4" onsubmit={createShop}>
+        <p class="mt-1 text-sm text-slate-600">Enter a name to add the shop.</p>
+        <form
+            class="mt-5 space-y-4"
+            onsubmit={(event) => {
+                event.preventDefault();
+                $form.post('/shops', { onSuccess: onClose });
+            }}
+        >
             <div class="grid gap-2">
                 <Label for="shop-name"
                     >Shop Name <span class="text-red-500">*</span></Label
                 >
                 <input
                     type="text"
+                    id="shop-name"
+                    name="name"
                     class="input input-sm w-full"
                     bind:value={form.name}
                     placeholder="Downtown Print Hub"
                     required
                 />
+                <InputError message={$form.errors.name} />
             </div>
 
             <div class="grid gap-2">
@@ -55,6 +55,7 @@
                     placeholder="1"
                     required
                 />
+                <InputError message={$form.errors.normal_print_price} />
             </div>
 
             <div class="grid gap-2">
@@ -69,6 +70,7 @@
                     placeholder="2"
                     required
                 />
+                <InputError message={$form.errors.color_print_price} />
             </div>
 
             <div class="grid gap-2">
@@ -85,6 +87,7 @@
                     placeholder="3"
                     required
                 />
+                <InputError message={$form.errors.double_sided_print_price} />
             </div>
 
             <div class="flex justify-end gap-2 pt-2">
@@ -94,7 +97,6 @@
                 <button
                     type="submit"
                     class="btn btn-primary"
-                    onclick={onClose}
                     disabled={$form.processing}
                     >{$form.processing ? 'Creating...' : 'Create Shop'}</button
                 >
@@ -105,4 +107,4 @@
     <form method="dialog" class="modal-backdrop">
         <button type="button" onclick={onClose}>close</button>
     </form>
-</dialog>
+</div>
