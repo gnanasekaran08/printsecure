@@ -17,9 +17,8 @@ class ShopListController extends Controller
 
             $shops->getCollection()->transform(function ($shop) {
                 return [
-                    'id'                     => $shop->id,
+                     ...$shop->toArray(),
                     'shop_uuid'              => $shop->uuid,
-                    'name'                   => $shop->name,
                     'created_at'             => $shop->created_at->toDateTimeString(),
                     'today_print_jobs_count' => $shop->today_print_jobs_count,
                     'qr_code_url'            => route('print', ['shop_uuid' => $shop->uuid]),

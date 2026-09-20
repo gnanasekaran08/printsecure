@@ -54,7 +54,7 @@
 <AppLayout {breadcrumbs} {headerActions}>
     <div class="h-full overflow-x-auto rounded-xl p-4">
         <div class="overflow-x-auto">
-            <table class="table table-compact w-full table-sm">
+            <table class="table table-zebra table-compact w-full table-sm">
                 <!-- head -->
                 <thead>
                     <tr>
@@ -116,47 +116,4 @@
 
 {#if showCreateShopModal}
     <ShopHandler shop={selectedShop} onClose={closeCreateShopModal} />
-    <!-- <dialog class="modal modal-open">
-        <div class="modal-box max-w-md">
-            <h3 class="text-lg font-semibold">Create New Shop</h3>
-            <p class="mt-1 text-sm text-base-content/70">
-                Enter a name to add the shop.
-            </p>
-
-            <form class="mt-5 space-y-4" onsubmit={createShop}>
-                <div class="grid gap-2">
-                    <Label for="shop-name">Shop Name</Label>
-                    <Input
-                        id="shop-name"
-                        name="name"
-                        value={shopName}
-                        oninput={(event) =>
-                            (shopName = (
-                                event.currentTarget as HTMLInputElement
-                            ).value)}
-                        placeholder="Downtown Print Hub"
-                        required
-                    />
-                    <InputError message={shopNameError} />
-                </div>
-
-                {#if createShopNote}
-                    <div class="alert alert-info text-sm">{createShopNote}</div>
-                {/if}
-
-                <div class="flex justify-end gap-2 pt-2">
-                    <button
-                        type="button"
-                        class="btn btn-ghost"
-                        onclick={closeCreateShopModal}>Cancel</button
-                    >
-                    <Button type="submit">Create Shop</Button>
-                </div>
-            </form>
-        </div>
-
-        <form method="dialog" class="modal-backdrop">
-            <button type="button" onclick={closeCreateShopModal}>close</button>
-        </form>
-    </dialog> -->
 {/if}
