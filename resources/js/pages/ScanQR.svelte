@@ -1,6 +1,6 @@
 <script lang="ts">
     import { router } from '@inertiajs/svelte';
-    import { Html5Qrcode, Html5QrcodeScannerState } from 'html5-qrcode';
+    import { Html5Qrcode } from 'html5-qrcode';
     import {
         QrCode,
         Camera,
@@ -13,7 +13,7 @@
         Flashlight,
         Upload,
     } from 'lucide-svelte';
-    import { onMount, onDestroy } from 'svelte';
+    import { onMount, onDestroy, tick } from 'svelte';
     import AppHead from '@/components/AppHead.svelte';
 
     // State
@@ -22,9 +22,8 @@
     let isScanning = $state(false);
     let hasPermission = $state<boolean | null>(null);
     let errorMessage = $state<string | null>(null);
-    let scannedShopUuid = $state<string | null>(null);
     let isRedirecting = $state(false);
-    let torchEnabled = $state(false);
+    let torchEnabled = $state(true);
     let cameraId = $state<string | null>(null);
 
     const SCAN_REGION_ID = 'qr-reader';
@@ -42,6 +41,7 @@
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
             stream.getTracks().forEach((track) => track.stop());
             hasPermission = true;
+            await tick();
             await startScanning();
         } catch (err) {
             console.error('Camera permission denied:', err);
@@ -56,20 +56,21 @@
         try {
             scanner = new Html5Qrcode(SCAN_REGION_ID);
 
-            const devices = await Html5Qrcode.getCameras();
-            // Prefer back camera
-            const backCamera = devices.find(
-                (d) => d.label.toLowerCase().includes('back') || d.label.toLowerCase().includes('rear')
-            );
-            cameraId = backCamera?.id || devices[0]?.id || null;
+            let cameraConfig: string | MediaTrackConstraints = { facingMode: 'environment' };
 
-            if (!cameraId) {
-                errorMessage = 'No camera found on this device.';
-                return;
+            try {
+                const devices = await Html5Qrcode.getCameras();
+                const backCamera = devices.find(
+                    (d) => d.label.toLowerCase().includes('back') || d.label.toLowerCase().includes('rear')
+                );
+                cameraId = backCamera?.id || devices[0]?.id || null;
+                cameraConfig = cameraId || cameraConfig;
+            } catch (err) {
+                console.warn('Could not enumerate cameras, using the environment camera constraint:', err);
             }
 
             await scanner.start(
-                cameraId,
+                cameraConfig,
                 {
                     fps: 10,
                     qrbox: { width: 250, height: 250 },
@@ -125,7 +126,6 @@
         }
 
         if (shopUuid) {
-            scannedShopUuid = shopUuid;
             isRedirecting = true;
             stopScanning();
 
@@ -136,19 +136,18 @@
         }
     }
 
-    function onScanFailure(error: string) {
+    function onScanFailure(_error: string) {
         // Ignore scan failures (no QR code in view)
     }
 
     async function toggleTorch() {
         if (scanner && isScanning) {
             try {
-                // @ts-ignore - torch may not be in types
                 await scanner.applyVideoConstraints({
-                    advanced: [{ torch: !torchEnabled }],
+                    advanced: [{ torch: !torchEnabled } as MediaTrackConstraintSet],
                 });
                 torchEnabled = !torchEnabled;
-            } catch (err) {
+            } catch {
                 console.log('Torch not supported on this device');
             }
         }
@@ -288,13 +287,13 @@
                 </div>
 
                 <!-- Alternative Action -->
-                <div class="pt-4 text-center">
+                <!-- <div class="pt-4 text-center">
                     <p class="mb-3 text-sm text-[#718078]">Don't have a QR code?</p>
                     <button onclick={goToManualUpload} class="btn btn-outline btn-lg w-full max-w-xs border-[#b8d6c3] text-[#297048] hover:bg-[#e8f4eb]">
                         <Upload class="h-5 w-5" />
                         Upload Without Scanning
                     </button>
-                </div>
+                </div> -->
             </div>
         {/if}
     </main>

@@ -54,7 +54,7 @@
 <AppLayout {breadcrumbs} {headerActions}>
     <div class="h-full overflow-x-auto rounded-xl p-4">
         <div class="overflow-x-auto">
-            <table class="table table-zebra table-compact w-full table-sm">
+            <table class="table table-compact w-full table-sm">
                 <!-- head -->
                 <thead>
                     <tr>
