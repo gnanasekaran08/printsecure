@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { page } from '@inertiajs/svelte';
     let {
-        class: className = 'w-90',
+        class: className = 'w-12',
         ...rest
     }: {
         class?: string;
@@ -9,9 +8,4 @@
     } = $props();
 </script>
 
-<img
-    src={$page.props.app_logo}
-    alt="PrintSecure - Privacy-First Print Infrastructure"
-    class={className}
-    {...rest}
-/>
+<img src="/favicon.svg" alt="PrintSecure" class={className} {...rest} />

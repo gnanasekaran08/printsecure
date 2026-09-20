@@ -5,7 +5,7 @@
     import Folder from 'lucide-svelte/icons/folder';
     import LayoutGrid from 'lucide-svelte/icons/layout-grid';
     import type { Snippet } from 'svelte';
-    import AppLogo from '@/components/AppLogo.svelte';
+    import AppLogoIcon from '@/components/AppLogoIcon.svelte';
     import NavFooter from '@/components/NavFooter.svelte';
     import NavMain from '@/components/NavMain.svelte';
     import NavUser from '@/components/NavUser.svelte';
@@ -71,7 +71,14 @@
                             href={toUrl(dashboard())}
                             class={props.class}
                         >
-                            <AppLogo />
+                            <AppLogoIcon
+                                class="hidden size-8 shrink-0 object-contain p-1 group-data-[collapsible=icon]:block"
+                            />
+                            <img
+                                src="/printsecure.svg"
+                                alt="PrintSecure"
+                                class="block h-8 w-auto max-w-34 object-contain group-data-[collapsible=icon]:hidden"
+                            />
                         </Link>
                     {/snippet}
                 </SidebarMenuButton>
