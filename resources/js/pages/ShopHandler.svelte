@@ -33,7 +33,7 @@
                     id="shop-name"
                     name="name"
                     class="input input-sm w-full"
-                    bind:value={form.name}
+                    bind:value={$form.name}
                     placeholder="Downtown Print Hub"
                     required
                 />
@@ -51,7 +51,7 @@
                     type="number"
                     min="0"
                     class="input input-sm w-full"
-                    bind:value={form.normal_print_price}
+                    bind:value={$form.normal_print_price}
                     placeholder="1"
                     required
                 />
@@ -66,7 +66,7 @@
                     type="number"
                     min="0"
                     class="input input-sm w-full"
-                    bind:value={form.color_print_price}
+                    bind:value={$form.color_print_price}
                     placeholder="2"
                     required
                 />
@@ -83,7 +83,7 @@
                     type="number"
                     min="0"
                     class="input input-sm w-full"
-                    bind:value={form.double_sided_print_price}
+                    bind:value={$form.double_sided_print_price}
                     placeholder="3"
                     required
                 />
