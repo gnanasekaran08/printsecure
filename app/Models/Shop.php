@@ -38,4 +38,9 @@ class Shop extends Model
         return $this->hasMany(PrintJob::class, 'shop_id')
             ->whereDate('created_at', now()->toDateString());
     }
+
+    public function print_jobs()
+    {
+        return $this->hasMany(PrintJob::class, 'shop_id');
+    }
 }

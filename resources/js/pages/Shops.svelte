@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { QrCode } from '@lucide/svelte';
+    import { QrCode, Trash2, Edit } from '@lucide/svelte';
     import AppHead from '@/components/AppHead.svelte';
     import Pagination from '@/components/Pagination.svelte';
     import AppLayout from '@/layouts/AppLayout.svelte';
@@ -7,7 +7,7 @@
     import type { BreadcrumbItem } from '@/types';
     import ShowQRModal from './Modals/ShowQRModal.svelte';
     import ShopHandler from './ShopHandler.svelte';
-    import { Edit } from 'lucide-svelte';
+    import { useForm } from '@inertiajs/svelte';
 
     let { shops } = $props();
     let selectedShop = $state(null);
@@ -24,6 +24,10 @@
             href: '/shops',
         },
     ];
+
+    let deleteForm = useForm({
+        shop_id: null,
+    });
 
     const showQRCode = (shop: any) => {
         selectedShop = shop;
@@ -46,6 +50,17 @@
         selectedShop = shop;
         showCreateShopModal = true;
         targetView = 'shop-handler';
+    };
+
+    const deleteShop = (shop: any) => {
+        if (
+            !confirm(`Are you sure you want to delete the shop "${shop.name}"?`)
+        ) {
+            return;
+        }
+        $deleteForm.shop_id = shop.id;
+
+        $deleteForm.delete('/shops/' + shop.id);
     };
 </script>
 
@@ -106,11 +121,19 @@
                             <td>
                                 <a
                                     href={'#'}
-                                    class="tooltip tooltip-left p-2"
+                                    class="text-blue-700 tooltip tooltip-left p-2"
                                     data-tip="Edit Shop"
                                     onclick={() => editShop(shop)}
                                 >
                                     <Edit size={18} />
+                                </a>
+                                <a
+                                    href={'#'}
+                                    class="tooltip tooltip-left p-2 text-red-700"
+                                    data-tip="Delete Shop"
+                                    onclick={() => deleteShop(shop)}
+                                >
+                                    <Trash2 size={18} />
                                 </a>
                             </td>
                         </tr>

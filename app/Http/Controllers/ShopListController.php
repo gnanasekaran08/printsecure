@@ -67,4 +67,28 @@ class ShopListController extends Controller
 
         return to_route('shops')->with('success', 'Shop updated successfully.');
     }
+
+    public function destroy($id): RedirectResponse
+    {
+        try {
+
+            $shop = Shop::query()->findOrFail($id);
+
+            if (! $shop) {
+                return redirect()->back()->withErrors(['error' => 'Shop not found.']);
+            }
+
+            $doesPrintJobsExists = $shop->print_jobs()->exists();
+
+            if ($doesPrintJobsExists) {
+                return redirect()->back()->withErrors(['error' => 'Cannot delete shop with existing print jobs.']);
+            }
+
+            $shop->delete();
+
+            return to_route('shops')->with('success', 'Shop deleted successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Failed to delete shop. Please try again later. ERROR: ' . $e->getMessage()]);
+        }
+    }
 }
