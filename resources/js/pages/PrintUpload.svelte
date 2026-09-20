@@ -11,7 +11,6 @@
         Printer,
         Copy,
         Palette,
-        BookOpen,
         ShoppingCart,
         CreditCard,
         Smartphone,
@@ -33,7 +32,14 @@
         shop = null,
         shopUuid = null,
     }: {
-        shop: { id: number; name: string; uuid: string } | null;
+        shop: {
+            id: number;
+            name: string;
+            uuid: string;
+            normal_print_price: number;
+            color_print_price: number;
+            double_sided_print_price: number;
+        } | null;
         shopUuid: string | null;
     } = $props();
 
@@ -44,7 +50,6 @@
     let files = $state<File[]>([]);
     let copies = $state(1);
     let isColor = $state(false);
-    let isDoubleSided = $state(false);
     let isUploading = $state(false);
     let isProcessingPayment = $state(false);
     let printJob = $state<any>(null);
@@ -53,12 +58,10 @@
 
     // Bottom sheet states
     let showColorSheet = $state(false);
-    let showDoubleSidedSheet = $state(false);
 
     // Pricing (in Rupees)
-    const pricePerPageBW = 5;
-    const pricePerPageColor = 15;
-    const doubleSidedDiscount = 0.1;
+    const pricePerPageBW = shop?.normal_print_price || 0;
+    const pricePerPageColor = shop?.color_print_price || 0;
 
     // Computed
     const estimatedPages = $derived(
@@ -76,10 +79,7 @@
             copies *
             (isColor ? pricePerPageColor : pricePerPageBW),
     );
-    const discount = $derived(
-        isDoubleSided ? subtotal * doubleSidedDiscount : 0,
-    );
-    const total = $derived(subtotal - discount);
+    const total = $derived(subtotal);
 
     onMount(() => {
         console.log('Uploading Doc');
@@ -113,7 +113,7 @@
         formData.append('shop_uuid', shopUuid || '');
         formData.append('copies', copies.toString());
         formData.append('is_color', isColor ? '1' : '0');
-        formData.append('is_double_sided', isDoubleSided ? '1' : '0');
+        formData.append('is_double_sided', '0');
 
         try {
             const response = await fetch('/print/upload', {
@@ -333,7 +333,6 @@
                     </p>
                 </div>
 
-                <!-- Upload Area -->
                 <label
                     class="flex min-h-40 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-6 transition-colors hover:border-violet-400 hover:bg-violet-50"
                 >
@@ -357,13 +356,12 @@
                     </p>
                 </label>
 
-                <!-- File List -->
                 {#if files.length > 0}
                     <div class="space-y-3">
                         <h3 class="font-semibold text-slate-800">
                             Selected Files ({files.length})
                         </h3>
-                        {#each files as file, index}
+                        {#each files as file, index (file.name + file.size + index)}
                             <div
                                 class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm"
                             >
@@ -383,6 +381,7 @@
                                     </p>
                                 </div>
                                 <button
+                                    type="button"
                                     onclick={() => removeFile(index)}
                                     class="btn btn-circle btn-ghost btn-sm text-red-500"
                                 >
@@ -393,13 +392,14 @@
                     </div>
 
                     <button
+                        type="button"
                         onclick={() => (currentStep = 'settings')}
                         class="btn btn-lg w-full gap-2 bg-gradient-to-r from-violet-500 to-indigo-600 text-white shadow-lg"
                     >
                         Continue
-                        <span class="badge badge-sm bg-white/20 text-white"
-                            >{estimatedPages} pages</span
-                        >
+                        <span class="badge badge-sm bg-white/20 text-white">
+                            {estimatedPages} pages
+                        </span>
                     </button>
                 {/if}
             </div>
@@ -422,7 +422,6 @@
                     </p>
                 </div>
 
-                <!-- Settings Cards -->
                 <div class="space-y-4">
                     <!-- Copies -->
                     <div
@@ -450,7 +449,8 @@
                                 >
                                     <Minus class="h-4 w-4" />
                                 </button>
-                                <span class="w-8 text-center text-lg font-bold text-slate-800"
+                                <span
+                                    class="w-8 text-center text-lg font-bold text-slate-800"
                                     >{copies}</span
                                 >
                                 <button
@@ -486,45 +486,15 @@
                                     Color Printing
                                 </p>
                                 <p class="text-sm text-slate-500">
-                                    <!-- {isColor
-                                        ? 'Color • ₹15/page'
-                                        : 'Black & White • ₹5/page'} -->
+                                    {isColor
+                                        ? `Color • ₹${shop?.color_print_price}/page`
+                                        : `Black & White • ₹${shop?.normal_print_price}/page`}
                                 </p>
                             </div>
                             <ChevronRight class="h-5 w-5 text-slate-400" />
                         </div>
                     </button>
 
-                    <!-- Double Sided -->
-                    <button
-                        onclick={() => (showDoubleSidedSheet = true)}
-                        class="w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-violet-300 hover:shadow-md active:scale-[0.98]"
-                    >
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="flex h-10 w-10 items-center justify-center rounded-xl {isDoubleSided
-                                    ? 'bg-gradient-to-br from-emerald-500 to-teal-500'
-                                    : 'bg-slate-200'}"
-                            >
-                                <BookOpen
-                                    class="h-5 w-5 {isDoubleSided
-                                        ? 'text-white'
-                                        : 'text-slate-600'}"
-                                />
-                            </div>
-                            <div class="flex-1 text-left">
-                                <p class="font-semibold text-slate-800">
-                                    Double Sided
-                                </p>
-                                <p class="text-sm text-slate-500">
-                                    {isDoubleSided
-                                        ? 'Double sided • 10% off'
-                                        : 'Single sided'}
-                                </p>
-                            </div>
-                            <ChevronRight class="h-5 w-5 text-slate-400" />
-                        </div>
-                    </button>
                 </div>
 
                 <!-- Summary Preview -->
@@ -610,38 +580,20 @@
                                     : 'Black & White'}</span
                             >
                         </div>
-                        <div class="flex justify-between">
+                        <!-- <div class="flex justify-between">
                             <span class="text-slate-600">Double Sided</span>
                             <span class="font-medium text-slate-800"
                                 >{printJob?.is_double_sided
                                     ? 'Yes'
                                     : 'No'}</span
                             >
-                        </div>
+                        </div> -->
 
                         <div class="my-3 border-t border-slate-200"></div>
 
-                        {#if printJob?.is_double_sided || null}
-                            <div class="flex justify-between text-slate-600">
-                                <span>Subtotal</span>
-                                <span
-                                    >₹{(printJob?.total_cost / 0.9).toFixed(
-                                        0,
-                                    )}</span
-                                >
-                            </div>
-                            <div class="flex justify-between text-emerald-600">
-                                <span>Double-sided Discount (10%)</span>
-                                <span
-                                    >-₹{(
-                                        (printJob?.total_cost / 0.9) *
-                                        0.1
-                                    ).toFixed(0)}</span
-                                >
-                            </div>
-                        {/if}
-
-                        <div class="flex justify-between text-lg font-bold text-slate-800">
+                        <div
+                            class="flex justify-between text-lg font-bold text-slate-800"
+                        >
                             <span>Total</span>
                             <span class="text-violet-600"
                                 >₹{printJob?.total_cost || 0}</span
@@ -938,113 +890,7 @@
         </div>
     {/if}
 
-    <!-- Double Sided Bottom Sheet -->
-    {#if showDoubleSidedSheet}
-        <div class="fixed inset-0 z-50">
-            <!-- Backdrop -->
-            <button
-                class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
-                onclick={() => (showDoubleSidedSheet = false)}
-                aria-label="Close"
-            ></button>
-
-            <!-- Sheet -->
-            <div
-                class="absolute inset-x-0 bottom-0 animate-slide-up rounded-t-3xl bg-white p-6 shadow-2xl"
-            >
-                <!-- Handle -->
-                <div
-                    class="mx-auto mb-4 h-1 w-12 rounded-full bg-slate-300"
-                ></div>
-
-                <!-- Header -->
-                <div class="mb-6 flex items-center justify-between">
-                    <h3 class="text-xl font-bold text-slate-800">Page Sides</h3>
-                    <button
-                        onclick={() => (showDoubleSidedSheet = false)}
-                        class="btn btn-circle btn-ghost btn-sm"
-                    >
-                        <X class="h-5 w-5" />
-                    </button>
-                </div>
-
-                <!-- Options -->
-                <div class="space-y-3">
-                    <!-- Single Sided Option -->
-                    <button
-                        onclick={() => {
-                            isDoubleSided = false;
-                            showDoubleSidedSheet = false;
-                        }}
-                        class="flex w-full items-center gap-4 rounded-2xl border-2 p-4 transition-all {!isDoubleSided
-                            ? 'border-violet-500 bg-violet-50'
-                            : 'border-slate-200 bg-white hover:border-slate-300'}"
-                    >
-                        <div
-                            class="flex h-14 w-14 items-center justify-center rounded-xl bg-slate-200"
-                        >
-                            <FileText class="h-7 w-7 text-slate-600" />
-                        </div>
-                        <div class="flex-1 text-left">
-                            <p class="text-lg font-semibold text-slate-800">
-                                Single Sided
-                            </p>
-                            <p class="text-sm text-slate-500">
-                                Print on one side only
-                            </p>
-                        </div>
-                        {#if !isDoubleSided}
-                            <div
-                                class="flex h-8 w-8 items-center justify-center rounded-full bg-violet-500"
-                            >
-                                <Check class="h-5 w-5 text-white" />
-                            </div>
-                        {/if}
-                    </button>
-
-                    <!-- Double Sided Option -->
-                    <button
-                        onclick={() => {
-                            isDoubleSided = true;
-                            showDoubleSidedSheet = false;
-                        }}
-                        class="flex w-full items-center gap-4 rounded-2xl border-2 p-4 transition-all {isDoubleSided
-                            ? 'border-violet-500 bg-violet-50'
-                            : 'border-slate-200 bg-white hover:border-slate-300'}"
-                    >
-                        <div
-                            class="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500"
-                        >
-                            <BookOpen class="h-7 w-7 text-white" />
-                        </div>
-                        <div class="flex-1 text-left">
-                            <p class="text-lg font-semibold text-slate-800">
-                                Double Sided
-                            </p>
-                            <p class="text-sm text-slate-500">
-                                Print on both sides • 10% discount
-                            </p>
-                        </div>
-                        {#if isDoubleSided}
-                            <div
-                                class="flex h-8 w-8 items-center justify-center rounded-full bg-violet-500"
-                            >
-                                <Check class="h-5 w-5 text-white" />
-                            </div>
-                        {/if}
-                    </button>
-                </div>
-
-                <!-- Savings hint -->
-                <div class="mt-4 rounded-xl bg-emerald-50 p-3 text-center">
-                    <p class="text-sm text-emerald-700">
-                        <span class="font-semibold">Tip:</span> Double sided printing
-                        saves paper and gives you 10% off!
-                    </p>
-                </div>
-            </div>
-        </div>
-    {/if}
+    <!-- Double-sided pricing and selection are temporarily disabled. -->
 </div>
 
 <style>

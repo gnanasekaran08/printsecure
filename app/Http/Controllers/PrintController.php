@@ -26,16 +26,24 @@ class PrintController extends Controller
      */
     public function print(Request $request, ?string $shop_uuid = null)
     {
-        $shop = null;
+        try {
+            $shop = null;
+            if ($shop_uuid) {
+                $shop = Shop::where('uuid', $shop_uuid)->first();
+            }
 
-        if ($shop_uuid) {
-            $shop = Shop::where('uuid', $shop_uuid)->first();
+            if (! $shop) {
+                return redirect()->back()->withErrors(['shop' => 'Shop is not active.']);
+            }
+
+            return Inertia::render('PrintUpload', [
+                'shop'     => $shop,
+                'shopUuid' => $shop_uuid,
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error fetching shop', ['error' => $e->getMessage()]);
         }
 
-        return Inertia::render('PrintUpload', [
-            'shop'     => $shop,
-            'shopUuid' => $shop_uuid,
-        ]);
     }
 
     /**
