@@ -13,12 +13,40 @@
         Store,
         Upload,
     } from 'lucide-svelte';
+    import { onMount } from 'svelte';
     import AppHead from '@/components/AppHead.svelte';
-    import { dashboard } from '@/routes';
     import { toUrl } from '@/lib/utils';
+    import { dashboard } from '@/routes';
 
     let { data } = $props();
     const auth = $derived($page.props.auth);
+
+    const flowSteps = [
+        {
+            icon: QrCode,
+            title: 'Scan QR',
+            subtitle: 'Corner Copy',
+        },
+        {
+            icon: Upload,
+            title: 'Upload',
+            subtitle: 'brief.pdf · 2.4 MB',
+        },
+        {
+            icon: FileText,
+            title: 'Printing',
+            subtitle: '2 mins left',
+        },
+    ];
+
+    let activeStep = $state(0);
+
+    onMount(() => {
+        const interval = setInterval(() => {
+            activeStep = (activeStep + 1) % flowSteps.length;
+        }, 2200);
+        return () => clearInterval(interval);
+    });
 
     const benefits = [
         {
@@ -191,76 +219,46 @@
                     >
                         <div class="flex items-center gap-2 text-sm font-bold">
                             <span class="h-2.5 w-2.5 rounded-full bg-[#3fb56b]"
-                            ></span>Secure print job
+                            ></span>Scan · Upload · Print
                         </div>
                         <span
                             class="rounded-full bg-[#edf8ef] px-3 py-1 text-xs font-bold text-[#2f8f5b]"
-                            >Ready</span
+                            >Live</span
                         >
                     </div>
-                    <div class="grid gap-4 py-6 sm:grid-cols-[1fr_0.72fr]">
-                        <div class="rounded-2xl bg-[#f5f7f4] p-5">
-                            <div class="mb-6 flex items-start justify-between">
-                                <FileText class="h-7 w-7 text-[#2f8f5b]" /><span
-                                    class="text-xs font-semibold text-[#8a9890]"
-                                    >PDF · 2.4 MB</span
-                                >
-                            </div>
-                            <div class="space-y-2.5">
-                                <div
-                                    class="h-2 w-4/5 rounded bg-[#d3ddd5]"
-                                ></div>
-                                <div
-                                    class="h-2 w-full rounded bg-[#d3ddd5]"
-                                ></div>
-                                <div
-                                    class="h-2 w-3/5 rounded bg-[#d3ddd5]"
-                                ></div>
-                                <div
-                                    class="mt-5 h-2 w-full rounded bg-[#e0e7e1]"
-                                ></div>
-                                <div
-                                    class="h-2 w-11/12 rounded bg-[#e0e7e1]"
-                                ></div>
-                            </div>
-                            <div class="mt-8 text-xs font-bold text-[#617069]">
-                                Project brief.pdf
-                            </div>
+                    <div class="relative py-8">
+                        <div class="relative grid grid-cols-3 gap-2 text-center sm:gap-4">
+                            {#each flowSteps as step, i (step.title)}
+                                <div class="flex flex-col items-center gap-3">
+                                    <div class="relative flex h-12 w-12 items-center justify-center">
+                                        {#if i === activeStep}
+                                            <span
+                                                class="absolute inset-0 animate-ping rounded-2xl bg-[#2f8f5b]/40"
+                                            ></span>
+                                        {/if}
+                                        <div
+                                            class={`relative flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-500 ${
+                                                i <= activeStep
+                                                    ? 'bg-[#2f8f5b] text-white shadow-[0_10px_20px_rgba(47,143,91,0.28)]'
+                                                    : 'bg-[#eef2ef] text-[#a7b3ac]'
+                                            } ${i === activeStep ? 'scale-110' : 'scale-100'}`}
+                                        >
+                                            <step.icon class="h-6 w-6" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div
+                                            class={`text-sm font-bold transition-colors duration-500 ${i <= activeStep ? 'text-[#17221d]' : 'text-[#a7b3ac]'}`}
+                                        >
+                                            {step.title}
+                                        </div>
+                                        <div class="mt-0.5 text-xs text-[#8a9890]">
+                                            {step.subtitle}
+                                        </div>
+                                    </div>
+                                </div>
+                            {/each}
                         </div>
-                        <div
-                            class="flex flex-col justify-between rounded-2xl bg-[#e8f4eb] p-5 text-[#17221d]"
-                        >
-                            <div>
-                                <div
-                                    class="mb-2 text-xs font-semibold uppercase tracking-[0.15em] text-[#5f806b]"
-                                >
-                                    Connected shop
-                                </div>
-                                <div class="text-lg font-bold">Corner Copy</div>
-                                <div class="mt-1 text-sm text-[#5f806b]">
-                                    0.4 mi away
-                                </div>
-                            </div>
-                            <div class="mt-8 border-t border-[#c9dfcf] pt-4">
-                                <div
-                                    class="flex items-center gap-2 text-sm font-semibold"
-                                >
-                                    <LockKeyhole
-                                        class="h-4 w-4 text-[#2f8f5b]"
-                                    />Encrypted upload
-                                </div>
-                                <div class="mt-3 text-2xl font-bold">$2.40</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="flex items-center justify-between rounded-xl bg-[#e8f4eb] px-4 py-3 text-sm font-semibold text-[#297048]"
-                    >
-                        <span class="inline-flex items-center gap-2"
-                            ><span
-                                class="h-2 w-2 animate-pulse rounded-full bg-[#2f8f5b]"
-                            ></span>Printing now</span
-                        ><span>2 mins</span>
                     </div>
                 </div>
                 <div
