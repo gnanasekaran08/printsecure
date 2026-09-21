@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Actions\Fortify;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class CreateNewUser implements CreatesNewUsers
@@ -19,14 +19,18 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        // Validate the default password roles with 8 chars
         Validator::make($input, [
-            ...$this->profileRules(),
-            'password' => $this->passwordRules(),
+             ...$this->profileRules(),
+            'password' => ['required', 'string', 'confirmed',
+                Password::default()
+                    ->min(8),
+            ],
         ])->validate();
 
         return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
+            'name'     => $input['name'],
+            'email'    => $input['email'],
             'password' => $input['password'],
         ]);
     }
