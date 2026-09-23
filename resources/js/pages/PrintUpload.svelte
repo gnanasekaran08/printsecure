@@ -71,11 +71,15 @@
     let showColorSheet = $state(false);
 
     // Pricing (in Rupees)
-    const pricePerPageBW = shop?.normal_print_price || 0;
-    const pricePerPageColor = shop?.color_print_price || 0;
+    const pricePerPageBW = $state(
+        parseFloat(shop?.normal_print_price?.toString() || '0'),
+    );
+    const pricePerPageColor = $state(
+        parseFloat(shop?.color_print_price?.toString() || '0'),
+    );
 
     // Computed
-    const estimatedPages = $derived(
+    let estimatedPages = $derived(
         files.reduce((acc, file) => {
             const ext = file.name.split('.').pop()?.toLowerCase();
             if (['jpg', 'jpeg', 'png'].includes(ext || '')) return acc + 1;
@@ -85,12 +89,32 @@
         }, 0),
     );
 
-    const subtotal = $derived(
-        estimatedPages *
-            copies *
-            (isColor ? pricePerPageColor : pricePerPageBW),
+    let subtotal = $derived.by(() => {
+        console.log('Estimated Pages:', estimatedPages);
+        console.log('Copies:', copies);
+        console.log('Is Color:', isColor);
+        console.log('Price Per Page BW:', pricePerPageBW);
+        console.log('Price Per Page Color:', pricePerPageColor);
+
+        const price = isColor ? pricePerPageColor : pricePerPageBW;
+        const totalPages = estimatedPages * copies;
+        const total = totalPages * price;
+
+        console.log('Total:', total.toFixed(0));
+        return total;
+    });
+    let total = $derived(subtotal.toFixed(2));
+
+    $inspect(
+        files,
+        copies,
+        isColor,
+        estimatedPages,
+        subtotal,
+        total,
+        pricePerPageBW,
+        pricePerPageColor,
     );
-    const total = $derived(subtotal);
 
     onMount(() => {
         try {
@@ -562,7 +586,7 @@
                     <div class="flex items-center justify-between">
                         <span class="text-slate-600">Estimated Total</span>
                         <span class="text-2xl font-bold text-slate-800"
-                            >₹{total.toFixed(0)}</span
+                            >₹{total}</span
                         >
                     </div>
                     <p class="mt-1 text-sm text-slate-500">
@@ -653,9 +677,7 @@
                             class="flex justify-between text-lg font-bold text-slate-800"
                         >
                             <span>Total</span>
-                            <span class="text-violet-600"
-                                >₹{printJob?.total_cost || 0}</span
-                            >
+                            <span class="text-violet-600">₹{total}</span>
                         </div>
                     </div>
                 </div>
@@ -950,7 +972,7 @@
 
     <!-- Double-sided pricing and selection are temporarily disabled. -->
 
-    {#if currentStep === 'upload' && cachedPrintJobs.length > 0}
+    {#if false && currentStep === 'upload' && cachedPrintJobs.length > 0}
         <div class="fixed inset-x-0 bottom-0 z-40 px-4 pb-4">
             <button
                 type="button"
