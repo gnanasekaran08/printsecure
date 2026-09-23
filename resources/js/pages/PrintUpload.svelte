@@ -810,9 +810,9 @@
                         {/each}
                     </div>
                     <p class="mt-4 text-sm text-white/80">
-                        Show this code at the shop to print and collect your
-                        printed documents. They won't be able to view the files
-                        or print them until you show this code.
+                        Show this code at the shop to print your documents.
+                        Without this code they can't able to open and print your
+                        documents.
                     </p>
                 </div>
                 <div
