@@ -9,14 +9,16 @@
         name: shop?.name ?? '',
         normal_print_price: shop?.normal_print_price ?? 1,
         color_print_price: shop?.color_print_price ?? 2,
-        double_sided_print_price: shop?.double_sided_print_price ?? 3,
+        double_sided_print_price: shop?.double_sided_print_price ?? 0,
         is_active: shop?.is_active ?? true,
     });
 </script>
 
 <div class="modal modal-open">
     <div class="modal-box max-w-md bg-white text-slate-800">
-        <h3 class="text-lg font-semibold">{shop?.id ? 'Edit Shop' : 'Create New Shop'}</h3>
+        <h3 class="text-lg font-semibold">
+            {shop?.id ? 'Edit Shop' : 'Create New Shop'}
+        </h3>
         <p class="mt-1 text-sm text-slate-600">Enter a name of the shop.</p>
         <form
             class="mt-5 space-y-4"
@@ -53,12 +55,18 @@
                 <input
                     id="normal-print-price"
                     name="normal_print_price"
-                    type="number"
-                    min="0"
+                    type="text"
                     class="input input-sm w-full"
                     bind:value={$form.normal_print_price}
                     placeholder="1"
                     required
+                    oninput={(event) => {
+                        // allow only numeric input. Like 1, 2, .70, 1.50
+                        event.target.value = event.target.value.replace(
+                            /[^0-9.]/g,
+                            '',
+                        );
+                    }}
                 />
                 <InputError message={$form.errors.normal_print_price} />
             </div>
@@ -68,16 +76,22 @@
                 <input
                     id="color-print-price"
                     name="color_print_price"
-                    type="number"
+                    type="text"
                     min="0"
                     class="input input-sm w-full"
                     bind:value={$form.color_print_price}
                     placeholder="2"
                     required
+                    oninput={(event) => {
+                        event.target.value = event.target.value.replace(
+                            /[^0-9.]/g,
+                            '',
+                        );
+                    }}
                 />
                 <InputError message={$form.errors.color_print_price} />
             </div>
-
+            <!--
             <div class="grid gap-2">
                 <Label for="double-sided-print-price"
                     >Double Sided Print Price</Label
@@ -93,7 +107,7 @@
                     required
                 />
                 <InputError message={$form.errors.double_sided_print_price} />
-            </div>
+            </div> -->
 
             <div class="flex justify-end gap-2 pt-2">
                 <button type="button" class="btn" onclick={onClose}
@@ -103,7 +117,11 @@
                     type="submit"
                     class="btn btn-primary"
                     disabled={$form.processing}
-                    >{$form.processing ? (shop?.id ? 'Updating...' : 'Creating...') : 'Save'}</button
+                    >{$form.processing
+                        ? shop?.id
+                            ? 'Updating...'
+                            : 'Creating...'
+                        : 'Save'}</button
                 >
             </div>
         </form>
